@@ -1,0 +1,18 @@
+name: Kingdoms
+version: 2.2
+main: com.Kingdoms.Kingdoms
+api-version: 1.20
+
+commands:
+    team:
+        description: All Team commands
+        usage: /<command>
+    t:
+        description: Team chat command
+        usage: /<command>
+    kingdom:
+        description: All Kingdom commands
+        usage: /<command>
+    k:
+        description: Kingdom chat command
+        usage: /<command>
