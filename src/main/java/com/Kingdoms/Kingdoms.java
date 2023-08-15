@@ -9,9 +9,12 @@ public class Kingdoms extends JavaPlugin {
 
 	public static Kingdoms instance;
 	public static final String CONFIG = "plugins/Kingdoms/";
+	public static Config settings;
+
 
 	public void onEnable() {
 		instance = this;
+		settings = new Config();
 		
 		/* Load data */
 		new Areas();

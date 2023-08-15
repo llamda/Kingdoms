@@ -29,7 +29,7 @@ public class Area {
 	
 	private HashSet<AreaUpgrade> upgrades = new HashSet<AreaUpgrade>();
 	
-	private int maxAreaSize = 36;
+	private int maxAreaSize = Kingdoms.settings.getMaxAreaSize();
 	
 	
 	// TODO: productions
