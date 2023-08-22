@@ -8,7 +8,7 @@ public class PlayerMove implements Listener {
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
-		
-		Events.sendAreaChangeMessage(event.getPlayer(), event.getFrom().getChunk(), event.getTo().getChunk());	
+
+		Events.sendAreaChangeMessage(event.getPlayer(), event.getFrom().getChunk(), event.getTo().getChunk());
 	}
 }

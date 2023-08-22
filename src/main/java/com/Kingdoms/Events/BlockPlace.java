@@ -21,38 +21,38 @@ public class BlockPlace implements Listener {
 		ClanPlayer clanPlayer = Connections.getClanPlayer(player.getUniqueId());
 		Block block = event.getBlock();
 		Area area = Areas.getChunkOwner(block);
-		
+
 		if (!Events.canBuild(clanPlayer, area)) {
 			if (area.hasAreaUpgrade(AreaUpgrade.TNT) && block.getType() == Material.TNT) {
 				event.setCancelled(true);
 				return;
 			}
-			
+
 			if (area.hasAreaUpgrade(AreaUpgrade.CLEAN)) {
 				Events.saveState(event.getBlockReplacedState());
 			}
 		}
-		
-		
-		
+
+
+
 		/*
 		if (!Events.canBuild(clanPlayer, event.getBlock())) {
 			Events.saveState(event.getBlockReplacedState());
 			return;
 		}
 		*/
-		
+
 		/*
 		if (block.getType() == Material.GOLD_BLOCK) {
-			
-			
+
+
 			if (AreaCommands.areaExpand(clanPlayer, new AreaChunk(block.getChunk())) == true) {
 				block.setType(Material.AIR);
 				event.setCancelled(true);
 			}
-			
-		}	
+
+		}
 		*/
 	}
-	
+
 }

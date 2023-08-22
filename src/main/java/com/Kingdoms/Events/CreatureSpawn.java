@@ -10,13 +10,13 @@ import com.Kingdoms.AreaUpgrade;
 import com.Kingdoms.Areas;
 
 public class CreatureSpawn implements Listener {
-	
+
 	@EventHandler
 	public void onCreatureSpawn(CreatureSpawnEvent event) {
-		
+
 		if (event.getEntity() instanceof Phantom) {
 			Phantom phantom = (Phantom) event.getEntity();
-		
+
 			Area area = Areas.getChunkOwner(phantom.getLocation().getChunk());
 			if (area != null && area.hasAreaUpgrade(AreaUpgrade.PHANTOM)) {
 				event.setCancelled(true);

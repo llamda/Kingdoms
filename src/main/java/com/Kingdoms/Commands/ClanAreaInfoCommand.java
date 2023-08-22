@@ -11,7 +11,7 @@ public class ClanAreaInfoCommand extends Command {
 
 	public ClanAreaInfoCommand(ClanPlayer clanPlayer, String[] args) {
 		super(clanPlayer, args);
-		
+
 		Area area;
 		if (argc < 3) {
 			area = Areas.getChunkOwner(chunk);
@@ -22,23 +22,23 @@ public class ClanAreaInfoCommand extends Command {
 			}
 			area = Areas.getAreaByName(areaName);
 		}
-		
+
 		if (area == null) {
 			msg(ERR + AREA_NOT_FOUND);
 			return;
 		}
-		
+
 		if (clan == null || !clan.isAreaOwner(area.getUuid()) || !rank.hasPermission("AREA_INFO")) {
 			msg(ERR + NO_PERMISSION);
 			return;
 		}
-		
-		
+
+
 		String message = "";
 		String coords = area.getFormattedAreaCoordinates();
-		
+
 		ChatColor c = Areas.getClanOwner(area).getColor();
-		
+
 		message += c + "[" + WHITE + area.getAreaName() + c + "] (" + WHITE + coords + c + ")\n";
 		message += "  Total Chunks: (" + WHITE + area.getAreaChunks().size() + c + "/" + WHITE + area.getMaxAreaSize() + c + ")\n";
 		message += "  Active Upgrades:";

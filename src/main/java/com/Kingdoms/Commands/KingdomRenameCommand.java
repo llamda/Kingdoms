@@ -8,7 +8,7 @@ public class KingdomRenameCommand extends Command {
 
 	public KingdomRenameCommand(ClanPlayer clanPlayer, String[] args) {
 		super(clanPlayer, args);
-		
+
 		if (argc < 2) {
 			clanPlayer.sendMessage(USAGE + KINGDOM_RENAME);
 			return;

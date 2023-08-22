@@ -13,15 +13,15 @@ import com.Kingdoms.AreaChunk;
 import com.Kingdoms.Kingdoms;
 
 public class ClanPlayer {
-	
+
 	private int ID;
-	
+
 	private File file;
 	private FileConfiguration playerConfig;
-	
+
 	private String name;
 	private UUID uuid;
-	
+
 	private Clan clan;
 	private Clan invite;
 
@@ -33,12 +33,12 @@ public class ClanPlayer {
 
 		setFile(new File(Kingdoms.CONFIG + "Players/" + uuid.toString() + ".yml"));
 		setPlayerConfig(YamlConfiguration.loadConfiguration(getFile()));
-		
+
 		OfflinePlayer player = Kingdoms.instance.getServer().getOfflinePlayer(uuid);
-		
+
 		setName(player.getName());
 		setUuid(uuid);
-		
+
 		if (getFile().exists()) {
 			loadData();
 			saveData();
@@ -47,52 +47,52 @@ public class ClanPlayer {
 			saveData();
 		}
 	}
-	
+
 	public void loadData() {
 		setClan(Clans.getClan(getUuid()));
 	}
-	
+
 	public void saveData() {
-		
+
 		getPlayerConfig().set("Name", getName());
 		getPlayerConfig().set("UUID", getUuid().toString());
-		
+
 		try {
 			getPlayerConfig().save(getFile());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public ClanRank getRank() {
 		return Clans.getClanRank(getUuid());
 	}
-	
+
 	public Kingdom getKingdom() {
-		
+
 		if (clan == null) return null;
-		
+
 		return (clan.getKingdom() == null) ? null : clan.getKingdom();
-		
+
 	}
 
 	public Player getPlayer() {
 		return Kingdoms.instance.getServer().getPlayer(getUuid());
 	}
-	
+
 	public AreaChunk getChunk() {
 		return new AreaChunk(getPlayer().getLocation().getChunk());
 	}
-	
+
 	/* Send ClanPlayer messages to player or console if offline */
-	public void sendMessage(String message) {	
+	public void sendMessage(String message) {
 		if (null != getPlayer()) {
 			getPlayer().sendMessage(message);
 		}	else {
 			Kingdoms.instance.getServer().getConsoleSender().sendMessage(message);
 		}
 	}
-	
+
 	public int getID() {
 		return ID;
 	}

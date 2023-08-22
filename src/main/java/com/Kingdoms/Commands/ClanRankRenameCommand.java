@@ -9,22 +9,22 @@ public class ClanRankRenameCommand extends Command {
 	 */
 	public ClanRankRenameCommand(ClanPlayer clanPlayer, String[] args) {
 		super(clanPlayer, args);
-		
+
 		if (argc < 3) {
 			msg(USAGE + CLAN_RRENAME);
 			return;
 		}
-		
+
 		if (clan == null) {
 			msg(ERR + NEED_TEAM);
 			return;
 		}
-		
+
 		if (!rank.hasPermission("RANKEDIT")) {
 			msg(ERR + NO_PERMISSION);
 			return;
 		}
-		
+
 		/* Get rank number */
 		int renamedRankNumber;
 		try {
@@ -33,21 +33,21 @@ public class ClanRankRenameCommand extends Command {
 			msg(USAGE + CLAN_RRENAME);
 			return;
 		}
-		
+
 		if (renamedRankNumber < 1 || renamedRankNumber > clan.getRanks().size()) {
 			msg(ERR + RANK_NOT_FOUND);
 			return;
 		}
-		
+
 		/* Get new rank name */
 		String newName = args[2];
 		for (int i = 3; i < argc; i++) {
 			newName += " " + args[i];
 		}
-	
+
 		clan.getClanRankByNumber(renamedRankNumber).setTitle(newName);
 		clan.saveData();
-		
+
 		msg(SUCCESS + "Rank renamed.");
 	}
 

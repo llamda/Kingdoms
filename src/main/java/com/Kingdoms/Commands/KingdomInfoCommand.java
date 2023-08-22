@@ -11,10 +11,10 @@ public class KingdomInfoCommand extends Command {
 
 	public KingdomInfoCommand(ClanPlayer clanPlayer, String[] args) {
 		super(clanPlayer, args);
-		
+
 		Kingdom target = null;
 		if (argc > 1) {
-			
+
 			String words = args[1];
 			for (int i = 2; i < args.length; i++) {
 				words += " " + args[i];
@@ -23,12 +23,12 @@ public class KingdomInfoCommand extends Command {
 		} else {
 			target = kingdom;
 		}
-		
+
 		if (target == null) {
 			clanPlayer.sendMessage(ERR + KINGDOM_NOT_FOUND);
 			return;
 		}
-		
+
 		String side = target.getColor() + "═══" + ChatColor.RESET;
 		String info = side + "   " + target.getName() + "   " + side;
 		for (Clan clan : target.getMemberClans()) {

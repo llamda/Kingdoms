@@ -8,7 +8,7 @@ import com.Kingdoms.Teams.Clans;
 
 public class KingdomInviteCommand extends Command {
 
-	
+
 	/**
 	 * Invites a new Clan to the user's Kingdom.
 	 * @param clanPlayer user
@@ -16,7 +16,7 @@ public class KingdomInviteCommand extends Command {
 	 */
 	public KingdomInviteCommand(ClanPlayer clanPlayer, String[] args) {
 		super(clanPlayer, args);
-		
+
 		/* Check if user can invite team */
 		if (argc < 2) {
 			clanPlayer.sendMessage(USAGE + KINGDOM_INVITE);

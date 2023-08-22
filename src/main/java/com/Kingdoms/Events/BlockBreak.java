@@ -14,32 +14,32 @@ public class BlockBreak implements Listener {
 
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
-		
+
 		Block block = event.getBlock();
-		
+
 		if (block.getType() == Material.SPAWNER) {
 			Area area = Areas.getChunkOwner(block);
 			if (area != null && area.hasAreaUpgrade(AreaUpgrade.SPAWNER)) {
 				event.setCancelled(true);
 			}
 		}
-		
-		
-		
+
+
+
 		/*
 		if (Events.canBuild(clanPlayer, block)) {
 			return;
 		}
-		
+
 		if (block.getState() instanceof InventoryHolder) {
 			player.sendMessage(ChatColor.RED + "You must capture this area to break that.");
 			event.setCancelled(true);
 			return;
 		}
-			
+
 		event.setDropItems(false);
 		Events.saveState(event.getBlock().getState());
 		*/
 	}
-	
+
 }

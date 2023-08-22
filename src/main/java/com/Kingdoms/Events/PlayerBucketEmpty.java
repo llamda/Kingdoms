@@ -16,12 +16,12 @@ public class PlayerBucketEmpty implements Listener {
 
 	@EventHandler
 	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
-		
+
 		Player player = (Player) event.getPlayer();
 		ClanPlayer clanPlayer = Connections.getClanPlayer(player.getUniqueId());
-		
+
 		Block liquid = event.getBlockClicked().getRelative(event.getBlockFace());
-		
+
 		Area area  = Areas.getChunkOwner(liquid);
 		if (!Events.canBuild(clanPlayer, area)) {
 			if (area.hasAreaUpgrade(AreaUpgrade.CLEAN)) {
@@ -29,12 +29,12 @@ public class PlayerBucketEmpty implements Listener {
 			}
 			Areas.getLiquids().add(liquid);
 		}
-		
+
 		/*
 		if (Events.canBuild(clanPlayer, liquid)) {
 			return;
 		}
-		
+
 		Areas.getLiquids().add(liquid);
 		Events.saveState(liquid.getState());
 		*/

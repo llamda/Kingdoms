@@ -8,7 +8,7 @@ public class KingdomChatCommand extends Command {
 
 	public KingdomChatCommand(ClanPlayer clanPlayer, String[] args) {
 		super(clanPlayer, args);
-		
+
 		if (kingdom == null) {
 			clanPlayer.sendMessage(ERR + NEED_KINGDOM);
 			return;
@@ -18,7 +18,7 @@ public class KingdomChatCommand extends Command {
 			clanPlayer.sendMessage(USAGE + KINGDOM_CHAT);
 			return;
 		}
-		
+
 		/* Show coords on @loc message */
 		String words = "";
 		if (args.length == 1 && args[0].equalsIgnoreCase("@LOC")) {
@@ -31,7 +31,7 @@ public class KingdomChatCommand extends Command {
 				words += " " + args[i];
 			}
 		}
-		
+
 		String message = name + ":" + ChatColor.AQUA + words;
 		kingdom.sendMessage(message);
 	}

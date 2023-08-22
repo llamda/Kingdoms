@@ -15,7 +15,7 @@ public class Kingdoms extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		settings = new Config();
-		
+
 		/* Load data */
 		new Areas();
 		new Clans();
@@ -45,7 +45,7 @@ public class Kingdoms extends JavaPlugin {
 		pm.registerEvents(new BlockBurn(), this);
 		pm.registerEvents(new ChunkUnload(), this);
 		pm.registerEvents(new CreatureSpawn(), this);
-		
+
 		/* Register Commands */
 		CommandListener commandListener = new CommandListener();
 		getCommand("team").setExecutor(commandListener);

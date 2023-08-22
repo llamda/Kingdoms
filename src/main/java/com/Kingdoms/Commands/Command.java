@@ -26,7 +26,7 @@ public abstract class Command {
 	protected Kingdom kingdom;
 	protected AreaChunk chunk;
 
-	
+
 	public final static ChatColor ERR = ChatColor.RED;
 	public final static ChatColor ERR_DARK = ChatColor.DARK_RED;
 	public final static ChatColor SUCCESS = ChatColor.GREEN;
@@ -36,8 +36,8 @@ public abstract class Command {
 	public final static ChatColor WHITE = ChatColor.WHITE;
 	public final static ChatColor STRIKETHROUGH = ChatColor.STRIKETHROUGH;
 	public final static ChatColor RESET = ChatColor.RESET;
-	
-	
+
+
 	public final static String USAGE = ERR + "Usage: ";
 	public final static String NEED_TEAM = "You must be in a team to do that.";
 	public final static String IN_TEAM = "You are already in a team.";
@@ -46,7 +46,7 @@ public abstract class Command {
 	public final static String NO_PERMISSION = "You do not have permission to do that.";
 	public final static String TAG_EXISTS = "Tag already in use.";
 	public final static String UNKNOWN_COLOR = "Unknown color. ";
-	public final static String COLORS = "Available colors: " + ChatColor.BLACK + "black" + INFO + ", " + ChatColor.DARK_BLUE + "dark_blue" + INFO + ", " + ChatColor.DARK_GREEN + "dark_green" + INFO + ", " + ChatColor.DARK_AQUA + "dark_aqua" + INFO + ", " + ChatColor.DARK_RED + "dark_red" + INFO + ", " + ChatColor.DARK_PURPLE + "dark_purple" + INFO + ", " + ChatColor.GOLD + "gold" + INFO + ", " + ChatColor.GRAY + "gray" + INFO + ", " + ChatColor.DARK_GRAY + "dark_gray" + INFO + ", " + ChatColor.BLUE + "blue" + INFO + ", " + ChatColor.GREEN + "green" + INFO + ", " + ChatColor.AQUA + "aqua" + INFO + ", " + ChatColor.RED + "red" + INFO + ", " + ChatColor.LIGHT_PURPLE + "light_purple" + INFO + ", " + ChatColor.YELLOW + "yellow" + INFO + ", " + ChatColor.WHITE + "white";	
+	public final static String COLORS = "Available colors: " + ChatColor.BLACK + "black" + INFO + ", " + ChatColor.DARK_BLUE + "dark_blue" + INFO + ", " + ChatColor.DARK_GREEN + "dark_green" + INFO + ", " + ChatColor.DARK_AQUA + "dark_aqua" + INFO + ", " + ChatColor.DARK_RED + "dark_red" + INFO + ", " + ChatColor.DARK_PURPLE + "dark_purple" + INFO + ", " + ChatColor.GOLD + "gold" + INFO + ", " + ChatColor.GRAY + "gray" + INFO + ", " + ChatColor.DARK_GRAY + "dark_gray" + INFO + ", " + ChatColor.BLUE + "blue" + INFO + ", " + ChatColor.GREEN + "green" + INFO + ", " + ChatColor.AQUA + "aqua" + INFO + ", " + ChatColor.RED + "red" + INFO + ", " + ChatColor.LIGHT_PURPLE + "light_purple" + INFO + ", " + ChatColor.YELLOW + "yellow" + INFO + ", " + ChatColor.WHITE + "white";
 	public final static String IN_KINGDOM = "You must not be the leader of a kingdom to do that.";
 	public final static String TEAM_NOT_FOUND = "Could not find team.";
 	public final static String PLAYER_NOT_FOUND = "Could not find player.";
@@ -72,7 +72,7 @@ public abstract class Command {
 	public final static String MUST_BE_INSIDE_AREA = "You must be inside an area to do that.";
 	public final static String UNKNOWN_UPGRADE = "Unknown upgrade.";
 	public final static String ALREADY_UPGRADED = "Area upgrade already purchased.";
-	
+
 	public final static String CLAN_CHAT 		= "/t <message|@loc>";
 	public final static String CLAN_HELP 		= "/team help [1-" + ClanHelpCommand.PAGES + "]";
 	public final static String CLAN_CREATE 		= "/team create <team name>";
@@ -93,13 +93,13 @@ public abstract class Command {
 	public final static String CLAN_RPERMS		= "/team rankpermissions";
 	public final static String CLAN_RINFO		= "/team rankinfo <rank name>";
 	public final static String CLAN_RMM			= "/team rankmassmove <rank#from> <rank#to>";
-	
+
 	public final static String CLAN_ACREATE		= "/team area create <area name>";
 	public final static String CLAN_AEXPAND		= "/team area expand";
 	public final static String CLAN_AINFO		= "/team area info [area name]";
 	public final static String CLAN_AUPGRADE	= "/team area upgrade <upgrade>";
 	public final static String CLAN_AUPGRADES	= "/team area upgrades";
-	
+
 	public final static String KINGDOM_INVITE	= "/kingdom invite <tag or team name>";
 	public final static String KINGDOM_ACCEPT	= "/kingdom accept";
 	public final static String KINGDOM_CHAT		= "/k <message|@loc>";
@@ -108,7 +108,7 @@ public abstract class Command {
 	public final static String KINGDOM_LEAVE	= "/kingdom leave";
 	public final static String KINGDOM_INFO		= "/kingdom info [kingdom name]";
 	public final static String KINGDOM_LIST		= "/kingdom list";
-	
+
 	public Command(ClanPlayer clanPlayer, String[] args) {
 		this.clanPlayer = clanPlayer;
 		this.clan = clanPlayer.getClan();
@@ -120,30 +120,30 @@ public abstract class Command {
 		this.kingdom = (clan != null) ? clan.getKingdom() : null;
 		this.chunk = clanPlayer.getChunk();
 	}
-	
+
 	public void msg(String message) {
 		player.sendMessage(message);
 	}
-	
+
 	public void broadcast(String message) {
 		Kingdoms.instance.getServer().broadcastMessage(message);
 	}
-	
+
 	public boolean isOnline(UUID uniqueId) {
 		return (Kingdoms.instance.getServer().getPlayer(uniqueId) != null);
 	}
-	
+
 	public boolean isOnline(String name) {
 		return (Kingdoms.instance.getServer().getPlayerExact(name) != null);
 	}
-	
+
 	public String getName(UUID uniqueId) {
 		return Kingdoms.instance.getServer().getOfflinePlayer(uniqueId).getName();
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public UUID getUniqueId (String name) {
 		return Kingdoms.instance.getServer().getOfflinePlayer(name).getUniqueId();
 	}
-	
+
 }

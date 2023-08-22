@@ -9,9 +9,9 @@ public class ClanRank {
 	private int rank;
 	private String title;
 	private Set<UUID> players = new HashSet<UUID>();
-	
-	
-	
+
+
+
 	/**	Permissions
 	 * ALL			Gives all permissions.
 	 * TAG			Can change clan tag.
@@ -24,7 +24,7 @@ public class ClanRank {
 	 * AREA_INFO	Can view information on held areas.
 	 * KINGDOM		Can edit kingdoms.
 	 */
-	
+
 	public static final String[] permissionList = {
 			"ALL",
 			"TAG",
@@ -37,32 +37,32 @@ public class ClanRank {
 			"AREA_INFO",
 			"KINGDOM"
 	};
-	
+
 	private Set<String> permissions = new HashSet<String>();
-	
+
 	public ClanRank(int rank, String title) {
 		setRankNumber(rank);
 		setTitle(title);
 	}
-	
+
 	public ClanRank(int rank, String title, Set<UUID> players, Set<String> permissions) {
 		setRankNumber(rank);
 		setTitle(title);
 		setPlayers(players);
 		setPermissions(permissions);
 	}
-	
+
 	public boolean hasPermission(String permission) {
-		
+
 		if (getPermissions().contains("ALL")) {
 			return true;
 		}
-		
+
 		return getPermissions().contains(permission);
 	}
-	
+
 	public boolean hasPermissions(String[] permissions) {
-		
+
 		for (String permission : permissions) {
 			if (!getPermissions().contains(permission)) {
 				return false;
@@ -70,18 +70,18 @@ public class ClanRank {
 		}
 		return true;
 	}
-	
+
 	public static boolean isValidPermission(String permission) {
-	
+
 		for (String p : permissionList) {
-			
+
 			if (p.equals(permission)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	public Set<String> getPlayersAsString() {
 		Set<String> players = new HashSet<String>();
 		for (UUID uuid : getPlayers()) {
@@ -120,5 +120,5 @@ public class ClanRank {
 
 	public void setPermissions(Set<String> permissions) {
 		this.permissions = permissions;
-	}	
+	}
 }

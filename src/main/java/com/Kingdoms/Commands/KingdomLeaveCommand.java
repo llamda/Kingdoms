@@ -20,14 +20,14 @@ public class KingdomLeaveCommand extends Command {
 			clanPlayer.sendMessage(ERR + MUST_APPOINT_NEW_KINGDOM);
 			return;
 		}
-		
+
 		if (!rank.hasPermission("KINGDOM")) {
 			clanPlayer.sendMessage(ERR + NO_PERMISSION);
 			return;
 		}
-		
+
 		kingdom.sendMessage(ERR_DARK + clan.getName() + ERR + " left the Kingdom.");
-		kingdom.removeMember(clan);	
+		kingdom.removeMember(clan);
 	}
 
 }

@@ -19,81 +19,81 @@ public class Area {
 
 	private File file;
 	private FileConfiguration areaConfig;
-	
+
 	private String worldName;
 	private AreaChunk centerChunk;
 	//private List<AreaChunk> areaChunks = new ArrayList<AreaChunk>();
-	
+
 	private HashSet<AreaChunk> areaChunks = new HashSet<AreaChunk>();
-	
-	
+
+
 	private HashSet<AreaUpgrade> upgrades = new HashSet<AreaUpgrade>();
-	
+
 	private int maxAreaSize = Kingdoms.settings.getMaxAreaSize();
-	
-	
+
+
 	// TODO: productions
-	
+
 	public Area(AreaChunk chunk, String areaName) {
-		
+
 		setUuid(UUID.randomUUID());
 		setFile(new File(Kingdoms.CONFIG + "Areas/" + uuid.toString() + ".yml"));
 		setAreaConfig(YamlConfiguration.loadConfiguration(getFile()));
-		
+
 		setAreaName(areaName);
 		setWorldName(chunk.getWorldName());
 		setCenterChunk(chunk);
 		getAreaChunks().add(chunk);
-		
+
 		saveData();
 	}
-	
+
 	public Area(File file) {
-		
+
 		setFile(file);
 		setAreaConfig(YamlConfiguration.loadConfiguration(getFile()));
-		
+
 		setUuid(UUID.fromString(getAreaConfig().getString("UUID")));
 		setAreaName(getAreaConfig().getString("AreaName"));
 		setWorldName(getAreaConfig().getString("WorldName"));
-		
+
 		setCenterChunk(AreaChunk.fromString(getWorldName(), getAreaConfig().getString("Center")));
-		
+
 		List<String> chunkData = getAreaConfig().getStringList("AreaChunks");
 		for (String chunk : chunkData) {
 			getAreaChunks().add(AreaChunk.fromString(getWorldName(), chunk));
 		}
-		
+
 		for (String upgrade : getAreaConfig().getStringList("Upgrades")) {
 			getUpgrades().add(AreaUpgrade.valueOf(upgrade));
 		}
 	}
-	
-	public void saveData() {	
+
+	public void saveData() {
 		getAreaConfig().set("UUID", getUuid().toString());
-		getAreaConfig().set("AreaName", getAreaName());	
+		getAreaConfig().set("AreaName", getAreaName());
 		getAreaConfig().set("WorldName", getWorldName());
 		getAreaConfig().set("Center", getCenterChunk().toString());
-		
+
 		List<String> chunkData = new ArrayList<String>();
 		for (AreaChunk chunk : getAreaChunks()) {
 			chunkData.add(chunk.toString());
 		}
 		getAreaConfig().set("AreaChunks", chunkData);
-		
+
 		List<String> upgrades = new ArrayList<String>();
 		for (AreaUpgrade upgrade : this.upgrades) {
 			upgrades.add(upgrade.toString());
 		}
 		getAreaConfig().set("Upgrades", upgrades);
-		
+
 		try {
 			getAreaConfig().save(getFile());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Checks if the area contains a specific chunk
 	 * @param x the chunk x
@@ -108,15 +108,15 @@ public class Area {
 		}
 		return false;
 	}
-	
+
 	public Location getAreaCenterLocation() {
-		
+
 		Chunk chunk = getCenterChunk().getChunk();
 		Location loc = chunk.getBlock(8, 60, 8).getLocation();
-		
+
 		return loc;
 	}
-	
+
 	public String getFormattedAreaCoordinates() {
 		Location center = getAreaCenterLocation();
 		return "X:" + center.getBlockX() + ", Z:" + center.getBlockZ();
@@ -125,17 +125,17 @@ public class Area {
 	public String getHiddenAreaCoordinates() {
 		return "X:?, Z:?";
 	}
-	
-	
+
+
 	public boolean hasAreaUpgrade(AreaUpgrade upgrade) {
 		return getUpgrades().contains(upgrade);
 	}
-	
+
 	public void addUpgrade(AreaUpgrade upgrade) {
 		getUpgrades().add(upgrade);
 		saveData();
 	}
-	
+
 	public UUID getUuid() {
 		return uuid;
 	}
@@ -185,22 +185,22 @@ public class Area {
 	}
 
 	/*
-	public List<AreaChunk> getAreaChunks() {
-		return areaChunks;
-	}
+    public List<AreaChunk> getAreaChunks() {
+        return areaChunks;
+    }
 
-	public void setAreaChunks(List<AreaChunk> areaChunks) {
-		this.areaChunks = areaChunks;
-	}
-	*/
+    public void setAreaChunks(List<AreaChunk> areaChunks) {
+        this.areaChunks = areaChunks;
+    }
+    */
 	public HashSet<AreaChunk> getAreaChunks() {
 		return areaChunks;
 	}
-	
+
 	public void setAreaChunks(HashSet<AreaChunk> areaChunks) {
 		this.areaChunks = areaChunks;
 	}
-	
+
 	public HashSet<AreaUpgrade> getUpgrades() {
 		return upgrades;
 	}
@@ -217,4 +217,4 @@ public class Area {
 		this.maxAreaSize = maxAreaSize;
 	}
 }
-		
+

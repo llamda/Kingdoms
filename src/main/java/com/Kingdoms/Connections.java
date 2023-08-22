@@ -23,7 +23,7 @@ public class Connections implements Listener {
 		clanPlayers.get(uuid).saveData();
 		clanPlayers.remove(uuid);
 	}
-	
+
 	public static void reload() {
 		clanPlayers.clear();
 

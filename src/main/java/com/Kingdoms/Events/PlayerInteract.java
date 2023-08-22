@@ -23,7 +23,7 @@ import com.Kingdoms.Connections;
 import com.Kingdoms.Teams.ClanPlayer;
 
 public class PlayerInteract implements Listener {
-	
+
 	private static final Material[] locked_materials = {
 		Material.LEVER,
 		Material.STONE_BUTTON,
@@ -53,27 +53,27 @@ public class PlayerInteract implements Listener {
 		Material.DARK_OAK_DOOR
 	};
 	private static final HashSet<Material> lockedSet = new HashSet<Material>(Arrays.asList(locked_materials));
-	
+
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		
+
 		Player player = event.getPlayer();
 		Material item = player.getInventory().getItemInMainHand().getType();
 		Action action = event.getAction();
-		
+
 		/* Show area center on compass */
 		if (item == Material.COMPASS && (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)) {
-			
+
 			Area area = Areas.getChunkOwner(new AreaChunk(player.getLocation().getChunk()));
 			if (area == null) {
 				return;
-			}	
-			
+			}
+
 			Location center = area.getAreaCenterLocation();
 			player.setCompassTarget(center);
 			player.sendMessage(ChatColor.GREEN + "Area center at: (X:" + (int) center.getX() + ", Z:" + (int) center.getZ() + ")");
 		}
-		
+
 		if (action == Action.LEFT_CLICK_AIR) {
 			PotionEffect potion = player.getPotionEffect(PotionEffectType.SLOW_DIGGING);
 			// Player has effect longer than Elder Gaurdians give
@@ -81,19 +81,19 @@ public class PlayerInteract implements Listener {
 				player.removePotionEffect(PotionEffectType.SLOW_DIGGING);
 			}
 		}
-		
+
 		if (action == Action.RIGHT_CLICK_BLOCK) {
-			
+
 			Block block = event.getClickedBlock();
 			Area area = Areas.getChunkOwner(block);
 			ClanPlayer clanPlayer = Connections.getClanPlayer(player.getUniqueId());
-			
+
 			if (!Events.canBuild(clanPlayer, area)) {
 				if (area.hasAreaUpgrade(AreaUpgrade.LOCK) && getLockedset().contains(block.getType())) {
 					event.setCancelled(true);
 					return;
 				}
-				
+
 				if (area.hasAreaUpgrade(AreaUpgrade.TNT)) {
 					Material mainhand = player.getInventory().getItemInMainHand().getType();
 					Material offhand = player.getInventory().getItemInOffHand().getType();
@@ -101,15 +101,15 @@ public class PlayerInteract implements Listener {
 						event.setCancelled(true);
 					}
 				}
-				
+
 			}
-			
+
 		}
-		
-		
+
+
 		// TODO opening doors etc...
-		
-		
+
+
 	}
 
 	public static HashSet<Material> getLockedset() {

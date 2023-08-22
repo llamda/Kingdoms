@@ -59,7 +59,7 @@ public class KingdomCommands {
 
 	/**
 	 * Invites a new Clan to the user's Kingdom.
-	 * 
+	 *
 	 * @param clanPlayer
 	 *            user
 	 * @param args
@@ -147,7 +147,7 @@ public class KingdomCommands {
 
 	/**
 	 * Accept an invite to a Kingdom
-	 * 
+	 *
 	 * @param clanPlayer
 	 *            user who will accept
 	 */
@@ -197,7 +197,7 @@ public class KingdomCommands {
 
 	/**
 	 * Leave a Kingdom
-	 * 
+	 *
 	 * @param clanPlayer
 	 *            user
 	 */
@@ -220,7 +220,7 @@ public class KingdomCommands {
 
 	/**
 	 * Show info for a Kingdom
-	 * 
+	 *
 	 * @param clanplayer
 	 *            user to show info to
 	 * @param args
@@ -314,7 +314,7 @@ public class KingdomCommands {
 
 	/**
 	 * Send a chat message to all players in the user's Kingdom
-	 * 
+	 *
 	 * @param clanPlayer
 	 *            user
 	 * @param args

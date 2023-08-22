@@ -7,19 +7,19 @@ public class AreaChunk {
 	private String worldName;
 	private int x;
 	private int z;
-	
+
 	public AreaChunk(String worldName, int x, int z) {
 		setWorldName(worldName);
 		setX(x);
 		setZ(z);
 	}
-	
+
 	public AreaChunk(Chunk chunk) {
 		setWorldName(chunk.getWorld().getName());
 		setX(chunk.getX());
 		setZ(chunk.getZ());
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -50,17 +50,17 @@ public class AreaChunk {
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return x + " " + z;
 	}
-	
+
 	public static AreaChunk fromString(String worldName, String string) {
 		String[] data = string.split(" ");
 		return new AreaChunk(worldName, Integer.valueOf(data[0]), Integer.valueOf(data[1]));
 	}
-	
+
 	public AreaChunk getRelative(int x, int z) {
 		return new AreaChunk(getWorldName(), getX() + x, getZ() + z);
 	}

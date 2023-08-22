@@ -9,14 +9,14 @@ public enum AreaUpgrade {
 	TNT(5, "TNT can not be placed inside your area."),
 	FIRE(5, "Burnt blocks will be restored inside your area.");
 	// ALARM(10, "")
-	
+
 	private int cost;
 	private String info;
 	AreaUpgrade(final int cost, final String info) {
 		this.setCost(cost);
 		this.setInfo(info);
 	}
-	
+
 	public int getCost() {
 		return cost;
 	}

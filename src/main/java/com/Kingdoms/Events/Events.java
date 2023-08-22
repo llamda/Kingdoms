@@ -27,7 +27,7 @@ public class Events {
 
 		AreaChunk chunk = new AreaChunk(block.getChunk());
 		Area area = Areas.getChunkOwner(chunk);
-		
+
 		if (area == null)
 			return true;
 
@@ -36,8 +36,8 @@ public class Events {
 
 		return true;
 	}
-	
-	
+
+
 	/**
 	 * Checks if the player can edit a certain area
 	 * @param clanPlayer the player
@@ -45,18 +45,18 @@ public class Events {
 	 * @return true if area is owned by player's team
 	 */
 	public static boolean canBuild(ClanPlayer clanPlayer, Area area) {
-		
+
 		if (area == null) {
 			return true;
 		}
-		
+
 		// TODO: let kingdom members build (if they want)
 		if (clanPlayer.getClan() == null || !clanPlayer.getClan().getAreas().contains(area.getUuid())) {
 			return false;
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Checks if the player can edit a certain block inside area area (Such as blocks they placed themselves in an unowned area)
 	 * @param clanPlayer the player
@@ -67,7 +67,7 @@ public class Events {
 	/*
 	 * lag..
 	public static boolean canBuild(ClanPlayer clanPlayer, Area area, Block block) {
-		
+
 		AreaChunk chunk = new AreaChunk(block.getChunk());
 		Set<BlockState> damage;
 		if ((damage = Areas.getChunkDamage().get(chunk)) != null) {
@@ -76,12 +76,12 @@ public class Events {
 					return true;
 				}
 			}
-		
+
 		}
 		return canBuild(clanPlayer, area);
 	}
 	*/
-	
+
 
 	public static boolean isArea(Location location) {
 
@@ -113,57 +113,57 @@ public class Events {
 		currentChunkStates.add(state);
 		Areas.getChunkDamage().put(chunk, currentChunkStates);
 	}
-	
-	public static void sendAreaChangeMessage(Player player, Chunk from, Chunk to) {	
-		
+
+	public static void sendAreaChangeMessage(Player player, Chunk from, Chunk to) {
+
 		if (from.equals(to)) {
 			return;
 		}
-		
+
 		Area fromArea = Areas.getChunkOwner(from);
 		Area toArea = Areas.getChunkOwner(to);
-		
+
 		if (toArea == fromArea) {
 			return;
 		}
-		
+
 		if (fromArea != null) {
 			player.sendMessage(ChatColor.RED + " * " + ChatColor.DARK_RED + "Leaving " + ChatColor.RED + fromArea.getAreaName());
 		}
-		
+
 		if (toArea != null) {
 			player.sendMessage(ChatColor.GREEN + " * " + ChatColor.DARK_GREEN + "Entering " + ChatColor.GREEN + toArea.getAreaName());
-		}	
+		}
 	}
-	
+
 	public static void restoreChunk(Chunk chunk) {
 		restoreChunk(new AreaChunk(chunk));
 	}
-	
+
 	public static void restoreChunk(AreaChunk chunk) {
-		
+
 		if (Areas.getChunkDamage().keySet().contains(chunk)) {
 		//	System.out.println("restoring damaged chunk.");
 			Set<BlockState> states = Areas.getChunkDamage().get(chunk);
 			for (BlockState state : states) {
-				
+
 				state.getBlock().breakNaturally();
 				state.update(true);
 			}
-			
+
 			Areas.getChunkDamage().remove(chunk);
 		}
 	}
-	
+
 	public static void restoreAllChunks() {
 		for (Set<BlockState> states : Areas.getChunkDamage().values()) {
 			for (BlockState state : states) {
-				
+
 				state.getBlock().breakNaturally();
 				state.update(true);
 			}
 		}
-		
+
 		Areas.getChunkDamage().clear();
 	}
 

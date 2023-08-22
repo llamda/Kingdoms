@@ -19,28 +19,28 @@ public class ClanAreaMapCommand extends Command {
 			msg(ERR + MUST_BE_INSIDE_AREA);
 			return;
 		}
-		
-		
+
+
 		int maxx = Integer.MIN_VALUE;
 		int maxz = Integer.MIN_VALUE;
 		int minx = Integer.MAX_VALUE;
 		int minz = Integer.MAX_VALUE;
-	
+
 		HashSet<AreaChunk> chunks = area.getAreaChunks();
 		for (AreaChunk c : chunks) {
-			
+
 			if (c.getX() < minx) {
 				minx = c.getX();
 			}
-			
+
 			if (c.getX() > maxx) {
 				maxx = c.getX();
 			}
-			
+
 			if (c.getZ() < minz) {
 				minz = c.getZ();
 			}
-			
+
 			if (c.getZ() > maxz) {
 				maxz = c.getZ();
 			}
@@ -48,17 +48,17 @@ public class ClanAreaMapCommand extends Command {
 		int width = maxx - minx;
 		int height = maxz - minz;
 		// player.sendMessage(width + "x" + height);
-		
+
 		width = (width > 25) ? 25 : width;
 		height = (height > 25) ? 25 : height;
-		
+
 		for (int z = minz, zn = minz + height; z <= zn; z++) {
-	
+
 			String message = "";
-			
-			for (int x = minx, xn = minx + width; x <= xn; x++) {	
+
+			for (int x = minx, xn = minx + width; x <= xn; x++) {
 				AreaChunk here = new AreaChunk(area.getWorldName(), x, z);
-				
+
 				if (chunks.contains(here)) {
 					if (here.equals(area.getCenterChunk())) {
 						message += ChatColor.GOLD + "█";
@@ -68,11 +68,11 @@ public class ClanAreaMapCommand extends Command {
 				} else {
 					message += ChatColor.RED + "█";
 				}
-				
+
 			}
 			msg(message);
 		}
-		
+
 	}
 
 }
