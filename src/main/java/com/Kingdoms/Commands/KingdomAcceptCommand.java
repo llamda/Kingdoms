@@ -1,39 +1,40 @@
 package com.Kingdoms.Commands;
 
-import org.bukkit.ChatColor;
-
 import com.Kingdoms.Teams.Clan;
 import com.Kingdoms.Teams.ClanPlayer;
 import com.Kingdoms.Teams.Clans;
 import com.Kingdoms.Teams.Kingdom;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public class KingdomAcceptCommand extends Command {
 
 	/**
-	 * Accept an invite to a Kingdom
+	 * Accept an invitation to a Kingdom
 	 * @param clanPlayer user who will accept
 	 */
 	public KingdomAcceptCommand(ClanPlayer clanPlayer, String[] args) {
 		super(clanPlayer, args);
 
 		if (clan == null) {
-			clanPlayer.sendMessage(ERR + NEED_TEAM);
+			error(NEED_TEAM);
 			return;
 		}
 
 		if (!rank.hasPermission("KINGDOM")) {
-			clanPlayer.sendMessage(ERR + NO_PERMISSION);
+			error(NO_PERMISSION);
 			return;
 		}
 
 		if (clan.getKingdomInvite() == null) {
-			clanPlayer.sendMessage(ERR + NO_INVITE);
+			error(NO_INVITE);
 			return;
 		}
 
 		Clan kingdomLeader = Clans.getClans().get(clan.getKingdomInvite());
 		if (kingdomLeader == null) {
-			clanPlayer.sendMessage(ERR + TEAM_NOT_FOUND);
+			error(TEAM_NOT_FOUND);
 			clan.setKingdomInvite(null);
 			return;
 		}
@@ -45,10 +46,15 @@ public class KingdomAcceptCommand extends Command {
 
 		/* Join current Kingdom */
 		else {
-			kingdomLeader.getKingdom().addClanMember(clanPlayer.getClan());
+			kingdomLeader.getKingdom().addClanMember(clan);
 			kingdomLeader.getKingdom().saveData();
 		}
-		kingdomLeader.getKingdom().sendExactMessage(ChatColor.AQUA + " * " + clanPlayer.getClan().getColor() + clanPlayer.getClan().getName() + ChatColor.AQUA + " has joined the kingdom.");
+
+		TextComponent message = Component.text(" * ", NamedTextColor.AQUA)
+				.append(Component.text(clan.getName(), clan.getColor()))
+				.append(Component.text(" has joined the kingdom.", NamedTextColor.AQUA));
+
+		kingdomLeader.getKingdom().sendExactMessage(message);
 		clan.setKingdomInvite(null);
 	}
 

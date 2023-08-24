@@ -1,6 +1,7 @@
 package com.Kingdoms.Commands;
 
 import com.Kingdoms.Teams.ClanPlayer;
+import net.kyori.adventure.text.Component;
 
 public class KingdomLeaveCommand extends Command {
 
@@ -12,21 +13,23 @@ public class KingdomLeaveCommand extends Command {
 		super(clanPlayer, args);
 
 		if (kingdom == null) {
-			clanPlayer.sendMessage(NEED_KINGDOM);
+			error(NEED_KINGDOM);
 			return;
 		}
 
 		if (clan.isKingdomLeader()) {
-			clanPlayer.sendMessage(ERR + MUST_APPOINT_NEW_KINGDOM);
+			error(MUST_APPOINT_NEW_KINGDOM);
 			return;
 		}
 
 		if (!rank.hasPermission("KINGDOM")) {
-			clanPlayer.sendMessage(ERR + NO_PERMISSION);
+			error(NO_PERMISSION);
 			return;
 		}
 
-		kingdom.sendMessage(ERR_DARK + clan.getName() + ERR + " left the Kingdom.");
+		kingdom.sendPrefixedMessage(Component.text(clan.getName(), ERR_DARK)
+				.append(Component.text(" left the Kingdom.", ERR)));
+
 		kingdom.removeMember(clan);
 	}
 

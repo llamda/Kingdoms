@@ -1,46 +1,57 @@
 package com.Kingdoms.Commands;
 
-import org.bukkit.ChatColor;
-
-import com.Kingdoms.Teams.Clan;
 import com.Kingdoms.Teams.ClanPlayer;
 import com.Kingdoms.Teams.Kingdom;
 import com.Kingdoms.Teams.Kingdoms;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.TextColor;
+
+import java.util.Optional;
 
 public class KingdomInfoCommand extends Command {
 
 	public KingdomInfoCommand(ClanPlayer clanPlayer, String[] args) {
 		super(clanPlayer, args);
 
-		Kingdom target = null;
+		Kingdom target;
 		if (argc > 1) {
 
-			String words = args[1];
+			StringBuilder words = new StringBuilder(args[1]);
 			for (int i = 2; i < args.length; i++) {
-				words += " " + args[i];
+				words.append(" ").append(args[i]);
 			}
-			target = Kingdoms.getKingdomByName(words);
+			target = Kingdoms.getKingdomByName(words.toString());
 		} else {
 			target = kingdom;
 		}
 
 		if (target == null) {
-			clanPlayer.sendMessage(ERR + KINGDOM_NOT_FOUND);
+			error(KINGDOM_NOT_FOUND);
 			return;
 		}
 
-		String side = target.getColor() + "═══" + ChatColor.RESET;
-		String info = side + "   " + target.getName() + "   " + side;
-		for (Clan clan : target.getMemberClans()) {
-			ChatColor color = clan.getColor();
-			String tag = (clan.getTag() == null) ? "" : clan.getTag();
+		TextComponent side = Component.text("\u2550\u2550", target.getColor());
+		TextComponent.Builder info = Component.text()
+				.append(side)
+				.append(Component.text("   " + target.getName() + "   "))
+				.append(side);
 
-			int onlinePlayers = clan.getOnlineMembers().size();
-			int totalPlayers = clan.getMembers().size();
+		target.getMemberClans().forEach(clan -> {
+			TextColor color = clan.getColor();
+			String tag = Optional.ofNullable(clan.getTag()).orElse("");
+			int online = clan.getOnlineMembers().size();
+			int total = clan.getMembers().size();
 
-			info += "\n   " + color + tag + " " + ChatColor.WHITE + clan.getName() + color + " [" + onlinePlayers + "/" + totalPlayers + "]";
-		}
-		clanPlayer.sendMessage(info);
+			info.appendNewline()
+					.append(Component.text("    "))
+					.append(Component.text(tag, color))
+					.appendSpace()
+					.append(Component.text(clan.getName()))
+					.append(Component.text(" [" + online + "/" + total + "]", color));
+		});
+
+		player.sendMessage(info.build());
 	}
 
 }

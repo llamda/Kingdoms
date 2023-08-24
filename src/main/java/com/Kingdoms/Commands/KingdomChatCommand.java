@@ -1,8 +1,8 @@
 package com.Kingdoms.Commands;
 
-import org.bukkit.ChatColor;
-
 import com.Kingdoms.Teams.ClanPlayer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public class KingdomChatCommand extends Command {
 
@@ -10,30 +10,30 @@ public class KingdomChatCommand extends Command {
 		super(clanPlayer, args);
 
 		if (kingdom == null) {
-			clanPlayer.sendMessage(ERR + NEED_KINGDOM);
+			error(NEED_KINGDOM);
 			return;
 		}
 
 		if (argc == 0) {
-			clanPlayer.sendMessage(USAGE + KINGDOM_CHAT);
+			usage(KINGDOM_CHAT);
 			return;
 		}
 
 		/* Show coords on @loc message */
-		String words = "";
+		StringBuilder words = new StringBuilder();
 		if (args.length == 1 && args[0].equalsIgnoreCase("@LOC")) {
-			words = " I am at X:" + (int) loc.getX() + " Y:" + (int) loc.getY() + " Z:" + (int) loc.getZ();
+			words = new StringBuilder(" I am at X:" + (int) loc.getX() + " Y:" + (int) loc.getY() + " Z:" + (int) loc.getZ());
 		}
 
 		// Otherwise send combined message
 		else {
-			for (int i = 0; i < args.length; i++) {
-				words += " " + args[i];
+			for (String arg : args) {
+				words.append(" ").append(arg);
 			}
 		}
 
-		String message = name + ":" + ChatColor.AQUA + words;
-		kingdom.sendMessage(message);
+		kingdom.sendPrefixedMessage(Component.text(name + ":", NamedTextColor.DARK_AQUA)
+				.append(Component.text(words.toString(), NamedTextColor.AQUA)));
 	}
 
 }

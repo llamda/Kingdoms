@@ -1,11 +1,14 @@
 package com.Kingdoms.Teams;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import org.bukkit.ChatColor;
 
 public class Kingdom extends AbstractTeam {
 
@@ -151,10 +154,14 @@ public class Kingdom extends AbstractTeam {
 
 
 	@Override
-	public String getMessageFormat(String message) {
-		return ChatColor.AQUA + "[KINGDOM] " + ChatColor.DARK_AQUA + message;
+	public TextComponent getMessagePrefix() {
+		return Component.text("[KINGDOM] ", NamedTextColor.AQUA);
 	}
 
+	@Override
+	public TextColor messageColor() {
+		return NamedTextColor.DARK_AQUA;
+	}
 
 
 	@Override
@@ -164,7 +171,7 @@ public class Kingdom extends AbstractTeam {
 
 
 
-	public ChatColor getColor() {
+	public TextColor getColor() {
 		return leader.getColor();
 	}
 

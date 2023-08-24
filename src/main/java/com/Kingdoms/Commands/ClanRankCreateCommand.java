@@ -13,36 +13,36 @@ public class ClanRankCreateCommand extends Command {
 		super(clanPlayer, args);
 
 		if (argc < 2) {
-			msg(USAGE + CLAN_RCREATE);
+			usage(CLAN_RANK_CREATE);
 			return;
 		}
 
 		if (clan == null) {
-			msg(ERR + NEED_TEAM);
+			error(NEED_TEAM);
 			return;
 		}
 
 		if (!rank.hasPermission("RANKEDIT")) {
-			msg(ERR + NO_PERMISSION);
+			error(NO_PERMISSION);
 			return;
 		}
 
-		String rankName = args[1];
+		StringBuilder rankName = new StringBuilder(args[1]);
 		for (int i = 2; i < args.length; i++) {
-			rankName += " " + args[i];
+			rankName.append(" ").append(args[i]);
 		}
 
-		if (clan.getRankByName(rankName) != null) {
-			msg(ERR + RANK_EXISTS);
+		if (clan.getRankByName(rankName.toString()) != null) {
+			error(RANK_EXISTS);
 			return;
 		}
 
 		int rank = clan.getRanks().size() + 1;
 
-		clan.getRanks().add(new ClanRank(rank, rankName));
+		clan.getRanks().add(new ClanRank(rank, rankName.toString()));
 		clan.saveData();
 
-		msg(SUCCESS + "Rank created!");
+		success("Rank created!");
 	}
 
 }

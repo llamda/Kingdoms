@@ -11,44 +11,44 @@ public class ClanRankRenameCommand extends Command {
 		super(clanPlayer, args);
 
 		if (argc < 3) {
-			msg(USAGE + CLAN_RRENAME);
+			usage(CLAN_RANK_RENAME);
 			return;
 		}
 
 		if (clan == null) {
-			msg(ERR + NEED_TEAM);
+			error(NEED_TEAM);
 			return;
 		}
 
 		if (!rank.hasPermission("RANKEDIT")) {
-			msg(ERR + NO_PERMISSION);
+			error(NO_PERMISSION);
 			return;
 		}
 
 		/* Get rank number */
 		int renamedRankNumber;
 		try {
-			renamedRankNumber = Integer.valueOf(args[1]);
+			renamedRankNumber = Integer.parseInt(args[1]);
 		} catch(NumberFormatException e) {
-			msg(USAGE + CLAN_RRENAME);
+			usage(CLAN_RANK_RENAME);
 			return;
 		}
 
 		if (renamedRankNumber < 1 || renamedRankNumber > clan.getRanks().size()) {
-			msg(ERR + RANK_NOT_FOUND);
+			error(RANK_NOT_FOUND);
 			return;
 		}
 
 		/* Get new rank name */
-		String newName = args[2];
+		StringBuilder newName = new StringBuilder(args[2]);
 		for (int i = 3; i < argc; i++) {
-			newName += " " + args[i];
+			newName.append(" ").append(args[i]);
 		}
 
-		clan.getClanRankByNumber(renamedRankNumber).setTitle(newName);
+		clan.getClanRankByNumber(renamedRankNumber).setTitle(newName.toString());
 		clan.saveData();
 
-		msg(SUCCESS + "Rank renamed.");
+		success("Rank renamed.");
 	}
 
 }

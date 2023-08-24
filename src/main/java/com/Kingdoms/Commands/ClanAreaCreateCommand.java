@@ -16,47 +16,47 @@ public class ClanAreaCreateCommand extends Command {
 		super(clanPlayer, args);
 
 		if (argc < 3) {
-			msg(USAGE + CLAN_ACREATE);
+			usage(CLAN_AREA_CREATE);
 			return;
 		}
 
 		if (clan == null) {
-			msg(ERR + NEED_TEAM);
+			error(NEED_TEAM);
 			return;
 		}
 
 		if (!rank.hasPermission("AREA")) {
-			msg(ERR + NO_PERMISSION);
+			error(NO_PERMISSION);
 			return;
 		}
 
 
-		if (clan.getAreas().size() >= 1) {
-			msg(ERR + "You can not make any more areas.");
+		if (!clan.getAreas().isEmpty()) {
+			error("You can not make any more areas.");
 			return;
 		}
 
 		List<Area> adjacentAreas = Areas.getNearbyAreas(chunk);
 
-		if (adjacentAreas.size() != 0) {
-			msg(ERR + NEARBY_AREA);
+		if (!adjacentAreas.isEmpty()) {
+			error(NEARBY_AREA);
 			return;
 		}
 
 		Transactions transactions = new Transactions(player);
 
 		if (!transactions.canAfford(Transactions.AREA_CREATE_PRICE)) {
-			msg(ERR + "You need " + Transactions.AREA_CREATE_PRICE + " " + Transactions.CURRENCY.toString().toLowerCase() + "(s) to do that.");
+			error("You need " + Transactions.AREA_CREATE_PRICE + " " + Transactions.CURRENCY.toString().toLowerCase() + "(s) to do that.");
 			return;
 		}
 
-		String areaName = args[2];
+		StringBuilder areaName = new StringBuilder(args[2]);
 		for (int i = 3; i < argc; i++) {
-			areaName += " " + args[i];
+			areaName.append(" ").append(args[i]);
 		}
 
-		if (Areas.getAreaByName(areaName) != null) {
-			msg(ERR + AREA_EXISTS);
+		if (Areas.getAreaByName(areaName.toString()) != null) {
+			error(AREA_EXISTS);
 			return;
 		}
 
@@ -64,13 +64,13 @@ public class ClanAreaCreateCommand extends Command {
 		/* Create Area */
 		transactions.pay(Transactions.AREA_CREATE_PRICE);
 
-		Area area = new Area(chunk, areaName);
+		Area area = new Area(chunk, areaName.toString());
 		Areas.getAreas().put(area.getUuid(), area);
 
 		clan.getAreas().add(area.getUuid());
 		clan.saveData();
 
-		msg(SUCCESS + "Created Area!");
+		success("Created Area!");
 	}
 
 }

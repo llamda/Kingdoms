@@ -1,11 +1,18 @@
 package com.Kingdoms.Commands;
 
-import org.bukkit.ChatColor;
-
 import com.Kingdoms.Area;
 import com.Kingdoms.AreaUpgrade;
 import com.Kingdoms.Areas;
+import com.Kingdoms.Teams.Clan;
 import com.Kingdoms.Teams.ClanPlayer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+
+import java.util.Optional;
 
 public class ClanAreaInfoCommand extends Command {
 
@@ -16,42 +23,47 @@ public class ClanAreaInfoCommand extends Command {
 		if (argc < 3) {
 			area = Areas.getChunkOwner(chunk);
 		} else {
-			String areaName = args[2];
+			StringBuilder areaName = new StringBuilder(args[2]);
 			for (int i = 3; i < args.length; i++) {
-				areaName += " " + args[i];
+				areaName.append(" ").append(args[i]);
 			}
-			area = Areas.getAreaByName(areaName);
+			area = Areas.getAreaByName(areaName.toString());
 		}
 
 		if (area == null) {
-			msg(ERR + AREA_NOT_FOUND);
+			error(AREA_NOT_FOUND);
 			return;
 		}
 
 		if (clan == null || !clan.isAreaOwner(area.getUuid()) || !rank.hasPermission("AREA_INFO")) {
-			msg(ERR + NO_PERMISSION);
+			error(NO_PERMISSION);
 			return;
 		}
 
-
-		String message = "";
 		String coords = area.getFormattedAreaCoordinates();
 
-		ChatColor c = Areas.getClanOwner(area).getColor();
+		TextColor c = Optional.ofNullable(Areas.getClanOwner(area)).map(Clan::getColor).orElse(NamedTextColor.GRAY);
+		TextComponent.Builder message = Component.text()
+				.append(wrap('[', area.getAreaName(), ']', c))
+				.appendSpace()
+				.append(wrap('(', coords, ')', c))
+				.appendNewline()
+				.append(Component.text("  Total Chunks: (", c))
+				.append(Component.text(area.getAreaChunks().size()))
+				.append(Component.text("/", c))
+				.append(Component.text(area.getMaxAreaSize()))
+				.append(Component.text(')', c))
+				.appendNewline()
+				.append(Component.text("  Active Upgrades:", c));
 
-		message += c + "[" + WHITE + area.getAreaName() + c + "] (" + WHITE + coords + c + ")\n";
-		message += "  Total Chunks: (" + WHITE + area.getAreaChunks().size() + c + "/" + WHITE + area.getMaxAreaSize() + c + ")\n";
-		message += "  Active Upgrades:";
+		Style unowned = Style.style(NamedTextColor.DARK_GRAY, TextDecoration.STRIKETHROUGH);
 		for (AreaUpgrade upgrade : AreaUpgrade.values()) {
-			message += ChatColor.RESET + " ";
-			if (!area.hasAreaUpgrade(upgrade)) {
-				message += ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH;
-			}	else {
-				message += ChatColor.RESET;
-			}
-			message += upgrade.toString().toLowerCase();
+			message.appendSpace().append(Component.text(
+					upgrade.toString().toLowerCase(),
+					area.hasAreaUpgrade(upgrade) ? Style.empty() : unowned));
 		}
-		player.sendMessage(message);
+
+		player.sendMessage(message.build());
 	}
 
 }

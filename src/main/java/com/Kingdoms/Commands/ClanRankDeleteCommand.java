@@ -12,34 +12,34 @@ public class ClanRankDeleteCommand extends Command {
 		super(clanPlayer, args);
 
 		if (argc < 2) {
-			msg(USAGE + CLAN_RDELETE);
+			usage(CLAN_RANK_DELETE);
 			return;
 		}
 
 		if (clan == null) {
-			msg(ERR + NEED_TEAM);
+			error(NEED_TEAM);
 			return;
 		}
 
 		if (!rank.hasPermission("RANKEDIT")) {
-			msg(ERR + NO_PERMISSION);
+			error(NO_PERMISSION);
 			return;
 		}
 
-		String rankName = args[1];
+		StringBuilder rankName = new StringBuilder(args[1]);
 		for (int i = 2; i < args.length; i++) {
-			rankName += " " + args[i];
+			rankName.append(" ").append(args[i]);
 		}
 
-		ClanRank deleted = clan.getRankByName(rankName);
+		ClanRank deleted = clan.getRankByName(rankName.toString());
 
 		if (deleted == null) {
-			msg(ERR + RANK_NOT_FOUND);
+			error(RANK_NOT_FOUND);
 			return;
 		}
 
 		if (!deleted.getPlayers().isEmpty()) {
-			msg(ERR + NON_EMPTY_RANK);
+			error(NON_EMPTY_RANK);
 			return;
 		}
 
@@ -61,7 +61,7 @@ public class ClanRankDeleteCommand extends Command {
 
 		clan.saveData();
 
-		msg(SUCCESS + "Rank deleted.");
+		success("Rank deleted.");
 	}
 
 }

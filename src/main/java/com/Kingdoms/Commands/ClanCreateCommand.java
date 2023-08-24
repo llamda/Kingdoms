@@ -15,32 +15,32 @@ public class ClanCreateCommand extends Command {
 		super(clanPlayer, args);
 
 		if (argc < 2) {
-			msg(USAGE + CLAN_CREATE);
+			usage(CLAN_CREATE);
 			return;
 		}
 
 		if (clan != null) {
-			msg(ERR + IN_TEAM);
+			error(IN_TEAM);
 			return;
 		}
 
-		String name = args[1];
+		StringBuilder name = new StringBuilder(args[1]);
 		for (int i = 2; i < argc; i++) {
-			name += " " + args[i];
+			name.append(" ").append(args[i]);
 		}
 
-		if (Clans.clanExists(name)) {
-			msg(ERR + TEAM_EXISTS);
+		if (Clans.clanExists(name.toString())) {
+			error(TEAM_EXISTS);
 			return;
 		}
 
-		if (Kingdoms.nameExists(name)) {
-			msg(ERR + KINGDOM_EXISTS);
+		if (Kingdoms.nameExists(name.toString())) {
+			error(KINGDOM_EXISTS);
 			return;
 		}
 
-		new Clan(clanPlayer, name);
-		msg(SUCCESS + "Team Created \"" + name + "\"");
+		new Clan(clanPlayer, name.toString());
+		success("Team Created \"" + name + "\"");
 	}
 
 }

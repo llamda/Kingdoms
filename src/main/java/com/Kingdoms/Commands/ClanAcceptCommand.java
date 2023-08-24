@@ -2,6 +2,8 @@ package com.Kingdoms.Commands;
 
 import com.Kingdoms.Teams.Clan;
 import com.Kingdoms.Teams.ClanPlayer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public class ClanAcceptCommand extends Command {
 
@@ -12,12 +14,12 @@ public class ClanAcceptCommand extends Command {
 		super(clanPlayer, args);
 
 		if (clanPlayer.getInvite() == null) {
-			msg(ERR + NO_INVITE);
+			error(NO_INVITE);
 			return;
 		}
 
 		if (!clanPlayer.getInvite().exists()) {
-			msg(ERR + TEAM_NOT_FOUND);
+			error(TEAM_NOT_FOUND);
 			clanPlayer.setInvite(null);
 			return;
 		}
@@ -28,7 +30,8 @@ public class ClanAcceptCommand extends Command {
 		clanPlayer.setInvite(null);
 		invitation.addMember(clanPlayer);
 
-		invitation.sendMessage(name + SUCCESS + " joined the team.");
+		invitation.sendPrefixedMessage(Component.text(name, NamedTextColor.DARK_GREEN)
+				.append(Component.text(" joined the team.", SUCCESS)));
 	}
 
 }

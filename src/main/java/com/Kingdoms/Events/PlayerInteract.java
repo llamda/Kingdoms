@@ -1,9 +1,13 @@
 package com.Kingdoms.Events;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
-import org.bukkit.ChatColor;
+import com.Kingdoms.Area;
+import com.Kingdoms.AreaChunk;
+import com.Kingdoms.AreaUpgrade;
+import com.Kingdoms.Areas;
+import com.Kingdoms.Connections;
+import com.Kingdoms.Teams.ClanPlayer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -15,12 +19,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import com.Kingdoms.Area;
-import com.Kingdoms.AreaChunk;
-import com.Kingdoms.AreaUpgrade;
-import com.Kingdoms.Areas;
-import com.Kingdoms.Connections;
-import com.Kingdoms.Teams.ClanPlayer;
+import java.util.Arrays;
+import java.util.HashSet;
 
 public class PlayerInteract implements Listener {
 
@@ -52,7 +52,7 @@ public class PlayerInteract implements Listener {
 		Material.ACACIA_DOOR,
 		Material.DARK_OAK_DOOR
 	};
-	private static final HashSet<Material> lockedSet = new HashSet<Material>(Arrays.asList(locked_materials));
+	private static final HashSet<Material> lockedSet = new HashSet<>(Arrays.asList(locked_materials));
 
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
@@ -71,12 +71,15 @@ public class PlayerInteract implements Listener {
 
 			Location center = area.getAreaCenterLocation();
 			player.setCompassTarget(center);
-			player.sendMessage(ChatColor.GREEN + "Area center at: (X:" + (int) center.getX() + ", Z:" + (int) center.getZ() + ")");
+
+			player.sendMessage(Component.text(
+					"Area center at: (X:" + (int) center.getX() + ", Z:" + (int) center.getZ() + ")",
+					NamedTextColor.GREEN));
 		}
 
 		if (action == Action.LEFT_CLICK_AIR) {
 			PotionEffect potion = player.getPotionEffect(PotionEffectType.SLOW_DIGGING);
-			// Player has effect longer than Elder Gaurdians give
+			// Player has effect longer than Elder Guardians give
 			if (potion != null && potion.getDuration() > 10000) {
 				player.removePotionEffect(PotionEffectType.SLOW_DIGGING);
 			}
@@ -85,19 +88,21 @@ public class PlayerInteract implements Listener {
 		if (action == Action.RIGHT_CLICK_BLOCK) {
 
 			Block block = event.getClickedBlock();
+			if (block == null) return;
+
 			Area area = Areas.getChunkOwner(block);
 			ClanPlayer clanPlayer = Connections.getClanPlayer(player.getUniqueId());
 
 			if (!Events.canBuild(clanPlayer, area)) {
-				if (area.hasAreaUpgrade(AreaUpgrade.LOCK) && getLockedset().contains(block.getType())) {
+				if (area.hasAreaUpgrade(AreaUpgrade.LOCK) && getLockedSet().contains(block.getType())) {
 					event.setCancelled(true);
 					return;
 				}
 
 				if (area.hasAreaUpgrade(AreaUpgrade.TNT)) {
-					Material mainhand = player.getInventory().getItemInMainHand().getType();
+					Material mainHand = player.getInventory().getItemInMainHand().getType();
 					Material offhand = player.getInventory().getItemInOffHand().getType();
-					if (mainhand == Material.TNT_MINECART || offhand == Material.TNT_MINECART) {
+					if (mainHand == Material.TNT_MINECART || offhand == Material.TNT_MINECART) {
 						event.setCancelled(true);
 					}
 				}
@@ -112,7 +117,7 @@ public class PlayerInteract implements Listener {
 
 	}
 
-	public static HashSet<Material> getLockedset() {
+	public static HashSet<Material> getLockedSet() {
 		return lockedSet;
 	}
 }

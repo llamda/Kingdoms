@@ -5,6 +5,8 @@ import java.util.Collection;
 import com.Kingdoms.Teams.ClanPlayer;
 import com.Kingdoms.Teams.Kingdom;
 import com.Kingdoms.Teams.Kingdoms;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 
 public class KingdomListCommand extends Command {
 
@@ -12,14 +14,19 @@ public class KingdomListCommand extends Command {
 		super(clanPlayer, args);
 
 		Collection<Kingdom> kingdoms = Kingdoms.getKingdoms().values();
-		String message = INFO_DARK + "Showing All Kingdoms (" + INFO + "Total: " + kingdoms.size() + INFO_DARK + ")\n";
+
+		TextComponent.Builder message = Component.text()
+				.append(Component.text("Showing All Kingdoms ", INFO_DARK))
+				.append(wrap('(', "Total: " + kingdoms.size(), ')', INFO_DARK, INFO))
+				.appendNewline();
 
 		for (Kingdom k : kingdoms) {
 			int opc = k.getOnlineMembers().size();
 			int tpc = k.getMembers().size();
-			message += k.getColor() + k.getName() + " [" + opc + "/" + tpc + "]";
+			message.append(Component.text(k.getName() + " [" + opc + "/" + tpc + "]", k.getColor()));
 		}
-		msg(message);
+
+		player.sendMessage(message.build());
 	}
 
 }

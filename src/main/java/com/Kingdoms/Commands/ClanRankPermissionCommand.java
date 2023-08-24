@@ -13,17 +13,17 @@ public class ClanRankPermissionCommand extends Command {
 
 
 		if (argc != 4) {
-			msg(USAGE + CLAN_RPERM);
+			usage(CLAN_RANK_PERM);
 			return;
 		}
 
 		if (clan == null) {
-			msg(ERR + NEED_TEAM);
+			error(NEED_TEAM);
 			return;
 		}
 
 		if (!rank.hasPermission("RANKEDIT")) {
-			msg(ERR + NO_PERMISSION);
+			error(NO_PERMISSION);
 			return;
 		}
 
@@ -31,19 +31,19 @@ public class ClanRankPermissionCommand extends Command {
 		/* Get rank */
 		int rankNumber;
 		try {
-			rankNumber = Integer.valueOf(args[1]);
+			rankNumber = Integer.parseInt(args[1]);
 		} catch(NumberFormatException e) {
-			msg(USAGE + CLAN_RPERM);
+			usage(CLAN_RANK_PERM);
 			return;
 		}
 
 		if (rankNumber < 1 || rankNumber > clan.getRanks().size()) {
-			msg(ERR + RANK_NOT_FOUND);
+			error(RANK_NOT_FOUND);
 			return;
 		}
 
 		if (rankNumber == 1) {
-			msg(ERR + NO_PERMISSION);
+			error(NO_PERMISSION);
 			return;
 		}
 
@@ -54,7 +54,7 @@ public class ClanRankPermissionCommand extends Command {
 		String permission = args[2].toUpperCase();
 
 		if (!ClanRank.isValidPermission(permission)) {
-			msg(ERR + PERM_NOT_FOUND);
+			error(PERM_NOT_FOUND);
 			return;
 		}
 
@@ -62,11 +62,11 @@ public class ClanRankPermissionCommand extends Command {
 		/* Get new value */
 		String stringValue = args[3].toUpperCase();
 		if (!stringValue.equals("TRUE") && !stringValue.equals("FALSE")) {
-			msg(ERR + NON_BOOLEAN);
+			error(NON_BOOLEAN);
 			return;
 		}
 
-		boolean value = Boolean.valueOf(stringValue);
+		boolean value = Boolean.parseBoolean(stringValue);
 
 		if (value) {
 			changed.getPermissions().add(permission);
@@ -78,7 +78,7 @@ public class ClanRankPermissionCommand extends Command {
 
 		clan.saveData();
 
-		msg(SUCCESS + "Permissions updated.");
+		success("Permissions updated.");
 	}
 
 }

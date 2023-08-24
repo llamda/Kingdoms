@@ -1,18 +1,20 @@
 package com.Kingdoms.Teams;
 
+import com.Kingdoms.Area;
+import com.Kingdoms.Areas;
+import com.Kingdoms.Connections;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-
-import org.bukkit.ChatColor;
-
-import com.Kingdoms.Area;
-import com.Kingdoms.Areas;
-import com.Kingdoms.Connections;
-import com.Kingdoms.KingdomsUtils;
 
 public class Clan extends AbstractTeam {
 
@@ -21,7 +23,8 @@ public class Clan extends AbstractTeam {
 
 
 	private String tag;
-	private ChatColor color;
+
+	private TextColor color = NamedTextColor.GRAY;
 
 	private Set<ClanRank> ranks = new HashSet<ClanRank>();
 
@@ -90,7 +93,9 @@ public class Clan extends AbstractTeam {
 		/* Generic values */
 		setUuid(UUID.fromString(getTeamConfig().getString("UUID")));
 		setName(getTeamConfig().getString("Name"));
-		setColor(ChatColor.valueOf(getTeamConfig().getString("Color")));
+
+		setColor(Optional.ofNullable(TextColor.fromCSSHexString(getTeamConfig().getString("Color")))
+				.orElse(NamedTextColor.GRAY));
 		setTag(getTeamConfig().getString("Tag"));
 
 
@@ -136,7 +141,7 @@ public class Clan extends AbstractTeam {
 	public void loadDefaults() {
 
 		if (getColor() == null)
-			setColor(ChatColor.GRAY);
+			setColor(NamedTextColor.GRAY);
 
 		if (getRanks().isEmpty()) {
 			ClanRank leader = new ClanRank(1, "Leader");
@@ -157,7 +162,7 @@ public class Clan extends AbstractTeam {
 		/* Generic values */
 		getTeamConfig().set("UUID", getUuid().toString());
 		getTeamConfig().set("Name", getName());
-		getTeamConfig().set("Color", KingdomsUtils.chatColorToString(getColor()));
+		getTeamConfig().set("Color", getColor().asHexString());
 		getTeamConfig().set("Tag", getTag());
 
 		/* Ranks */
@@ -307,12 +312,12 @@ public class Clan extends AbstractTeam {
 	}
 
 
-	public ChatColor getColor() {
+	public TextColor getColor() {
 		return color;
 	}
 
 
-	public void setColor(ChatColor color) {
+	public void setColor(TextColor color) {
 		this.color = color;
 	}
 
@@ -363,8 +368,13 @@ public class Clan extends AbstractTeam {
 	}
 
 	@Override
-	public String getMessageFormat(String message) {
-		return ChatColor.GREEN + "[TEAM] " + ChatColor.DARK_GREEN + message;
+	public TextComponent getMessagePrefix() {
+		return Component.text("[TEAM] ", NamedTextColor.GREEN);
+	}
+
+	@Override
+	public TextColor messageColor() {
+		return NamedTextColor.DARK_GREEN;
 	}
 
 	@Override

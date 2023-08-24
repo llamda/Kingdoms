@@ -1,6 +1,7 @@
 package com.Kingdoms.Commands;
 
 import com.Kingdoms.Teams.ClanPlayer;
+import net.kyori.adventure.text.Component;
 
 /**
  * Kicks a player from the user's Clan
@@ -11,17 +12,17 @@ public class ClanKickCommand extends Command {
 		super(clanPlayer, args);
 
 		if (argc != 2) {
-			msg(USAGE + CLAN_KICK);
+			usage(CLAN_KICK);
 			return;
 		}
 
 		if (clan == null) {
-			msg(ERR + NEED_TEAM);
+			error(NEED_TEAM);
 			return;
 		}
 
 		if (!rank.hasPermission("KICK")) {
-			msg(ERR + NO_PERMISSION);
+			error(NO_PERMISSION);
 			return;
 		}
 
@@ -37,12 +38,12 @@ public class ClanKickCommand extends Command {
 		}
 
 		if (kickedPlayer == null) {
-			msg(ERR + PLAYER_NOT_FOUND);
+			error(PLAYER_NOT_FOUND);
 			return;
 		}
 
 		if (rank.getRankNumber() > kickedPlayer.getRank().getRankNumber()) {
-			msg (ERR + NO_PERMISSION);
+			error(NO_PERMISSION);
 			return;
 		}
 
@@ -50,11 +51,12 @@ public class ClanKickCommand extends Command {
 		clan.removeMember(kickedPlayer);
 
 		if (isOnline(kickedPlayer.getUuid())) {
-			kickedPlayer.sendMessage(ERR + "You have been kicked from the team.");
+			kickedPlayer.sendMessage(Component.text( "You have been kicked from the team.", ERR));
 			kickedPlayer.setClan(null);
 		}
 
-		clan.sendMessage(ERR_DARK + kickedPlayer.getName() + ERR + " has been kicked from the team.");
+		clan.sendPrefixedMessage(Component.text(kickedPlayer.getName(), ERR_DARK)
+				.append(Component.text(" has been kicked from the team.", ERR)));
 	}
 
 }

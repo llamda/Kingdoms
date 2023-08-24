@@ -1,10 +1,11 @@
 package com.Kingdoms.Commands;
 
-import org.bukkit.ChatColor;
-
 import com.Kingdoms.Teams.Clan;
 import com.Kingdoms.Teams.ClanPlayer;
 import com.Kingdoms.Teams.Clans;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public class KingdomInviteCommand extends Command {
 
@@ -19,71 +20,81 @@ public class KingdomInviteCommand extends Command {
 
 		/* Check if user can invite team */
 		if (argc < 2) {
-			clanPlayer.sendMessage(USAGE + KINGDOM_INVITE);
+			usage(KINGDOM_INVITE);
 			return;
 		}
 
 		if (clan == null) {
-			clanPlayer.sendMessage(ERR + NEED_TEAM);
+			error(NEED_TEAM);
 			return;
 		}
 
 		if (!rank.hasPermission("KINGDOM")) {
-			clanPlayer.sendMessage(ERR + NO_PERMISSION);
+			error(NO_PERMISSION);
 			return;
 		}
 
 		/* Check for Clan with given args as tag or name */
 		Clan target;
-		String check = args[1];
+		StringBuilder check = new StringBuilder(args[1]);
 		for (int i = 2; i < args.length; i++)
-			check += " " + args[i];
+			check.append(" ").append(args[i]);
 
-		if (Clans.tagExists(check)) {
-			target = Clans.getClanByTag(check);
+		if (Clans.tagExists(check.toString())) {
+			target = Clans.getClanByTag(check.toString());
 		}
 
-		else if (Clans.clanExists(check)) {
-			target = Clans.getClanByName(check);
+		else if (Clans.clanExists(check.toString())) {
+			target = Clans.getClanByName(check.toString());
 		}
 
 		else {
-			clanPlayer.sendMessage(ERR + TEAM_NOT_FOUND);
+			error(TEAM_NOT_FOUND);
+			return;
+		}
+
+		if (target == null) {
+			error(TEAM_NOT_FOUND);
 			return;
 		}
 
 		/* Check if team can be invited */
 		if (target.getKingdom() != null) {
-			clanPlayer.sendMessage(ERR + TEAM_HAS_KINGDOM);
+			error(TEAM_HAS_KINGDOM);
 			return;
 		}
 
 		if (target.getKingdomInvite() == clan.getUuid()) {
-			clanPlayer.sendMessage(ERR + ALREADY_INVITED_KINGDOM);
+			error(ALREADY_INVITED_KINGDOM);
 			return;
 		}
 
 		/* Create new Kingdom */
 		if (kingdom == null) {
 			if (target == clanPlayer.getClan()) {
-				clanPlayer.sendMessage(ERR + CANNOT_INVITE_SELF);
+				error(CANNOT_INVITE_SELF);
 				return;
 			}
-			clan.sendExactMessage(ChatColor.AQUA + " * " + target.getColor() + target.getName() + ChatColor.AQUA + " has been invited to your kingdom.");
-			target.sendExactMessage(ChatColor.AQUA + " * " + clanPlayer.getClan().getColor() + clanPlayer.getClan().getName() + ChatColor.AQUA + " has invited you to join their kingdom.\nTo accept do /kingdom accept");
-			target.setKingdomInvite(clanPlayer.getClan().getUuid());
 		}
 
 		/* Invite to current Kingdom */
 		else {
 			if (!clan.isKingdomLeader()) {
-				clanPlayer.sendMessage(ERR + NO_PERMISSION);
+				error(NO_PERMISSION);
 				return;
 			}
 
-			kingdom.sendExactMessage(ChatColor.AQUA + " * " + target.getColor() + target.getName() + ChatColor.AQUA + " has been invited to the Kingdom.");
-			target.sendExactMessage(ChatColor.AQUA + " * " + clanPlayer.getKingdom().getColor() + clanPlayer.getKingdom().getName() + ChatColor.AQUA + " has invited you to join their Kingdom.\nTo accept do /kingdom accept");
-			target.setKingdomInvite(clanPlayer.getClan().getUuid());
 		}
+		clan.sendExactMessage(invitation(target,
+				" has been invited to your kingdom."));
+		target.sendExactMessage(invitation(clanPlayer.getClan(),
+				" has invited you to join their kingdom.\nTo accept do /kingdom accept"));
+		target.setKingdomInvite(clanPlayer.getClan().getUuid());
+	}
+
+	private static TextComponent invitation(Clan clan, String message) {
+		return Component.text(" * ", NamedTextColor.AQUA)
+				.append(Component.text(clan.getName(), clan.getColor()))
+				.append(Component.text(message, NamedTextColor.AQUA));
 	}
 }

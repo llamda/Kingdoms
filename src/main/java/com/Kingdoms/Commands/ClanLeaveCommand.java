@@ -1,6 +1,7 @@
 package com.Kingdoms.Commands;
 
 import com.Kingdoms.Teams.ClanPlayer;
+import net.kyori.adventure.text.Component;
 
 public class ClanLeaveCommand extends Command {
 
@@ -11,21 +12,22 @@ public class ClanLeaveCommand extends Command {
 		super(clanPlayer, args);
 
 		if (clan== null) {
-			msg(ERR + NEED_TEAM);
+			error(NEED_TEAM);
 			return;
 		}
 
 		if (rank.getRankNumber() == 1 && rank.getPlayers().size() < 2) {
-			msg(ERR + MUST_APPOINT_NEW);
-			msg (USAGE + CLAN_RSET);
+			error(MUST_APPOINT_NEW);
+			usage(CLAN_RANK_SET);
 			return;
 		}
 
 		// TODO fix ranks
 		clan.removeMember(clanPlayer);
-		msg(SUCCESS + "You left the team.");
+		success("You left the team.");
 
-		clan.sendMessage(ERR_DARK + name + ERR + " left the team.");
+		clan.sendPrefixedMessage(Component.text(name, ERR_DARK)
+				.append(Component.text(" left the team.", ERR)));
 	}
 
 }

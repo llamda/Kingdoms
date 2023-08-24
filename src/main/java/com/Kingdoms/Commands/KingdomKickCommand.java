@@ -3,6 +3,7 @@ package com.Kingdoms.Commands;
 import com.Kingdoms.Teams.Clan;
 import com.Kingdoms.Teams.ClanPlayer;
 import com.Kingdoms.Teams.Clans;
+import net.kyori.adventure.text.Component;
 
 public class KingdomKickCommand extends Command {
 
@@ -10,45 +11,57 @@ public class KingdomKickCommand extends Command {
 		super(clanPlayer, args);
 
 		if (argc != 2) {
-			msg(USAGE + KINGDOM_KICK);
+			usage(KINGDOM_KICK);
 			return;
 		}
 
 		if (kingdom == null) {
-			msg(ERR + NEED_KINGDOM);
+			error(NEED_KINGDOM);
 			return;
 		}
 
 		if (!rank.hasPermission("KICK") || !clan.isKingdomLeader()) {
-			msg(ERR + NO_PERMISSION);
+			error(NO_PERMISSION);
 			return;
 		}
 
 		/* Check for Clan with given args as tag or name */
 		Clan target;
-		String check = args[1];
+		StringBuilder check = new StringBuilder(args[1]);
 		for (int i = 2; i < args.length; i++)
-			check += " " + args[i];
+			check.append(" ").append(args[i]);
 
-		if (Clans.tagExists(check)) {
-			target = Clans.getClanByTag(check);
+		if (Clans.tagExists(check.toString())) {
+			target = Clans.getClanByTag(check.toString());
 		}
 
-		else if (Clans.clanExists(check)) {
-			target = Clans.getClanByName(check);
+		else if (Clans.clanExists(check.toString())) {
+			target = Clans.getClanByName(check.toString());
 		}
 
 		else {
-			msg(ERR + TEAM_NOT_FOUND);
+			error(TEAM_NOT_FOUND);
+			return;
+		}
+
+		if (target == null) {
+			error(TEAM_NOT_FOUND);
 			return;
 		}
 
 		if (target.getKingdom() != kingdom) {
-			msg (ERR + TEAM_NOT_FOUND);
+			error(TEAM_NOT_FOUND);
 			return;
 		}
 
-		kingdom.sendMessage(ERR_DARK + target.getName() + ERR + " has been kicked from the kingdom.");
+		if (target.isKingdomLeader()) {
+			error(MUST_APPOINT_NEW_KINGDOM);
+			return;
+		}
+
+		kingdom.sendPrefixedMessage(Component.text(target.getName(), ERR_DARK)
+				.append(Component.text(" has been kicked from the Kingdom.", ERR)));
+
 		kingdom.removeMember(target);
 	}
 

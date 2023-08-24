@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -84,8 +85,8 @@ public class ClanPlayer {
 		return new AreaChunk(getPlayer().getLocation().getChunk());
 	}
 
-	/* Send ClanPlayer messages to player or console if offline */
-	public void sendMessage(String message) {
+	/*  Send ClanPlayer messages to player or console if offline */
+	public void sendMessage(TextComponent message) {
 		if (null != getPlayer()) {
 			getPlayer().sendMessage(message);
 		}	else {

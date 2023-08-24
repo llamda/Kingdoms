@@ -1,42 +1,19 @@
 package com.Kingdoms.Events;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.entity.Player;
-
 import com.Kingdoms.Area;
 import com.Kingdoms.AreaChunk;
 import com.Kingdoms.Areas;
 import com.Kingdoms.Teams.ClanPlayer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Chunk;
+import org.bukkit.block.BlockState;
+import org.bukkit.entity.Player;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class Events {
-
-	/**
-	 * Checks if the ClanPlayer can edit a certain block
-	 * @param clanPlayer the player
-	 * @param block the block
-	 * @return true if chunk is unclaimed or part of team's owned areas.
-	 */
-	public static boolean canBuild(ClanPlayer clanPlayer, Block block) {
-
-		AreaChunk chunk = new AreaChunk(block.getChunk());
-		Area area = Areas.getChunkOwner(chunk);
-
-		if (area == null)
-			return true;
-
-		if (clanPlayer.getClan() == null || !clanPlayer.getClan().getAreas().contains(area.getUuid()))
-			return false;
-
-		return true;
-	}
-
 
 	/**
 	 * Checks if the player can edit a certain area
@@ -51,46 +28,7 @@ public class Events {
 		}
 
 		// TODO: let kingdom members build (if they want)
-		if (clanPlayer.getClan() == null || !clanPlayer.getClan().getAreas().contains(area.getUuid())) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Checks if the player can edit a certain block inside area area (Such as blocks they placed themselves in an unowned area)
-	 * @param clanPlayer the player
-	 * @param area the area
-	 * @param block the block to check
-	 * @return true if area is owned by player's team
-	 */
-	/*
-	 * lag..
-	public static boolean canBuild(ClanPlayer clanPlayer, Area area, Block block) {
-
-		AreaChunk chunk = new AreaChunk(block.getChunk());
-		Set<BlockState> damage;
-		if ((damage = Areas.getChunkDamage().get(chunk)) != null) {
-			for (BlockState state : damage) {
-				if (state.getLocation().equals(block.getLocation())) {
-					return true;
-				}
-			}
-
-		}
-		return canBuild(clanPlayer, area);
-	}
-	*/
-
-
-	public static boolean isArea(Location location) {
-
-		AreaChunk chunk = new AreaChunk(location.getChunk());
-		for (Area area : Areas.getAreas().values()) {
-			if (area.getAreaChunks().contains(chunk))
-				return true;
-		}
-		return false;
+		return clanPlayer.getClan() != null && clanPlayer.getClan().getAreas().contains(area.getUuid());
 	}
 
 	public static void saveState(BlockState state) {
@@ -128,11 +66,15 @@ public class Events {
 		}
 
 		if (fromArea != null) {
-			player.sendMessage(ChatColor.RED + " * " + ChatColor.DARK_RED + "Leaving " + ChatColor.RED + fromArea.getAreaName());
+			player.sendMessage(Component.text(" * ", NamedTextColor.RED)
+					.append(Component.text("Leaving ", NamedTextColor.DARK_RED))
+					.append(Component.text(fromArea.getAreaName(), NamedTextColor.RED)));
 		}
 
 		if (toArea != null) {
-			player.sendMessage(ChatColor.GREEN + " * " + ChatColor.DARK_GREEN + "Entering " + ChatColor.GREEN + toArea.getAreaName());
+			player.sendMessage(Component.text(" * ", NamedTextColor.GREEN)
+					.append(Component.text("Entering ", NamedTextColor.DARK_GREEN))
+					.append(Component.text(toArea.getAreaName(), NamedTextColor.GREEN)));
 		}
 	}
 
@@ -142,15 +84,13 @@ public class Events {
 
 	public static void restoreChunk(AreaChunk chunk) {
 
-		if (Areas.getChunkDamage().keySet().contains(chunk)) {
-		//	System.out.println("restoring damaged chunk.");
+		if (Areas.getChunkDamage().containsKey(chunk)) {
 			Set<BlockState> states = Areas.getChunkDamage().get(chunk);
 			for (BlockState state : states) {
 
 				state.getBlock().breakNaturally();
 				state.update(true);
 			}
-
 			Areas.getChunkDamage().remove(chunk);
 		}
 	}

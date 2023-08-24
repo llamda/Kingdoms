@@ -1,11 +1,14 @@
 package com.Kingdoms.Commands;
 
-import java.util.UUID;
-
-import org.bukkit.ChatColor;
-
 import com.Kingdoms.Teams.ClanPlayer;
 import com.Kingdoms.Teams.ClanRank;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+
+import java.util.UUID;
 
 public class ClanRankInfoCommand extends Command {
 
@@ -16,70 +19,54 @@ public class ClanRankInfoCommand extends Command {
 		super(clanPlayer, args);
 
 		if (argc < 2) {
-			msg(ERR + CLAN_RINFO);
+			error(CLAN_RANK_INFO);
 			return;
 		}
 
 		if (clan == null) {
-			msg(ERR + NEED_TEAM);
+			error(NEED_TEAM);
 			return;
 		}
 
-		String rankName = args[1];
+		StringBuilder rankName = new StringBuilder(args[1]);
 		for (int i = 2; i < argc; i++) {
-			rankName += " " + args[i];
+			rankName.append(" ").append(args[i]);
 		}
 
-		ClanRank info = clan.getRankByName(rankName);
+		ClanRank info = clan.getRankByName(rankName.toString());
 
 		if (info == null) {
-			msg(ERR + RANK_NOT_FOUND);
+			error(RANK_NOT_FOUND);
 			return;
 		}
 
-		ChatColor c = clan.getColor();
+		TextComponent.Builder message = Component.text();
+		TextColor c = clan.getColor();
 
 
 		/* Info header */
-		msg(c + "--- " + WHITE + info.getTitle() + c + " ---");
-
+		message.append(Component.text("--- ", c))
+				.append(Component.text(info.getTitle()))
+				.append(Component.text(" ---", c));
 
 		/* Permissions */
-		String permissions = c + "Permissions: ";
+		message.appendNewline().append(Component.text("Permissions:", c));
+
+		Style permission = Style.style(INFO_DARK, TextDecoration.STRIKETHROUGH);
 
 		for (String p : ClanRank.permissionList) {
-
-			if (info.hasPermission(p)) {
-				permissions += WHITE;
-			}
-
-			else {
-				permissions += INFO_DARK + "" + STRIKETHROUGH;
-			}
-
-			permissions += p.toLowerCase() + RESET + " ";
+			message.appendSpace()
+					.append(Component.text(p.toLowerCase(), info.hasPermission(p) ? Style.empty() : permission));
 		}
-
-		msg(permissions);
-
 
 		/* Players */
-		String playerList = c + "Players:";
+		message.appendNewline().append(Component.text("Players:", c));
 
 		for (UUID uniqueId : info.getPlayers()) {
-
-			if (isOnline(uniqueId)) {
-				playerList += WHITE;
-			}
-
-			else {
-				playerList+= INFO;
-			}
-
-			playerList += " " + getName(uniqueId);
+			message.appendSpace().append(Component.text(getName(uniqueId), isOnline(uniqueId) ? WHITE : INFO));
 		}
 
-		msg(playerList);
+		player.sendMessage(message.build());
 	}
 
 }

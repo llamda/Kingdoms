@@ -1,6 +1,20 @@
 package com.Kingdoms;
 
-import com.Kingdoms.Events.*;
+import com.Kingdoms.Events.AsyncChat;
+import com.Kingdoms.Events.BlockBreak;
+import com.Kingdoms.Events.BlockBurn;
+import com.Kingdoms.Events.BlockDamage;
+import com.Kingdoms.Events.BlockFromTo;
+import com.Kingdoms.Events.BlockPlace;
+import com.Kingdoms.Events.ChunkUnload;
+import com.Kingdoms.Events.CreatureSpawn;
+import com.Kingdoms.Events.Events;
+import com.Kingdoms.Events.PlayerBucketEmpty;
+import com.Kingdoms.Events.PlayerInteract;
+import com.Kingdoms.Events.PlayerJoin;
+import com.Kingdoms.Events.PlayerMove;
+import com.Kingdoms.Events.PlayerQuit;
+import com.Kingdoms.Events.PlayerTeleport;
 import com.Kingdoms.Teams.Clans;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,12 +38,9 @@ public class Kingdoms extends JavaPlugin {
 		/* Reload any online players */
 		Connections.reload();
 
-		/* Start standard timers */
-		KingdomsUtils.startTimer();
-
 		/* Register Events */
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new AsyncPlayerChat(), this);
+		pm.registerEvents(new AsyncChat(), this);
 		pm.registerEvents(new PlayerJoin(), this);
 		pm.registerEvents(new PlayerQuit(), this);
 		pm.registerEvents(new BlockDamage(), this);

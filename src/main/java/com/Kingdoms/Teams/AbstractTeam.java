@@ -1,16 +1,18 @@
 package com.Kingdoms.Teams;
 
+import com.Kingdoms.Connections;
+import com.Kingdoms.Kingdoms;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
-import com.Kingdoms.Connections;
-import com.Kingdoms.Kingdoms;
 
 public abstract class AbstractTeam {
 
@@ -36,10 +38,9 @@ public abstract class AbstractTeam {
 	public abstract List<ClanPlayer> getMembers();
 
 
-	/* Get format for messages sent to this Team */
-	public abstract String getMessageFormat(String message);
+	public abstract TextComponent getMessagePrefix();
 
-
+	public abstract TextColor messageColor();
 
 	/* Load new Configuration file */
 	public void loadNew() {
@@ -82,7 +83,7 @@ public abstract class AbstractTeam {
 	/* Get all online members in group */
 	public List<ClanPlayer> getOnlineMembers() {
 
-		List<ClanPlayer> online = new ArrayList<ClanPlayer>();
+		List<ClanPlayer> online = new ArrayList<>();
 
 		for (ClanPlayer player : getMembers()) {
 
@@ -95,24 +96,17 @@ public abstract class AbstractTeam {
 	}
 
 
-
-	/* Send message with special formatting to all members in group */
-	public void sendMessage(String message) {
-
-		String format = getMessageFormat(message);
-		sendExactMessage(format);
-
+	public void sendPrefixedMessage(TextComponent message) {
+		sendExactMessage(getMessagePrefix().append(message));
 	}
 
-
+	public void sendPrefixedString(String message) {
+		sendExactMessage(getMessagePrefix().append(Component.text(message, messageColor())));
+	}
 
 	/* Send exact message to all members in group without any formatting */
-	public void sendExactMessage(String message) {
-
-		for (ClanPlayer player : getOnlineMembers()) {
-			player.sendMessage(message);
-		}
-
+	public void sendExactMessage(TextComponent message) {
+		getOnlineMembers().forEach(p -> p.getPlayer().sendMessage(message));
 	}
 
 
@@ -147,21 +141,9 @@ public abstract class AbstractTeam {
 	}
 
 
-
-	public void setFile(File file) {
-		this.file = file;
-	}
-
-
-
 	public FileConfiguration getTeamConfig() {
 		return teamConfig;
 	}
 
-
-
-	public void setTeamConfig(FileConfiguration teamConfig) {
-		this.teamConfig = teamConfig;
-	}
 
 }

@@ -1,8 +1,8 @@
 package com.Kingdoms.Commands;
 
-import org.bukkit.ChatColor;
-
 import com.Kingdoms.Teams.ClanPlayer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public class ClanChatCommand extends Command {
 
@@ -13,29 +13,29 @@ public class ClanChatCommand extends Command {
 		super(clanPlayer, args);
 
 		if (clan == null) {
-			msg(ERR + NEED_TEAM);
+			error(NEED_TEAM);
 			return;
 		}
 
 		if (argc == 0) {
-			msg(USAGE + CLAN_CHAT);
+			usage(CLAN_CHAT);
 			return;
 		}
 
 		/* Show coords on @loc message */
-		String words = "";
+		StringBuilder words = new StringBuilder();
 		if (args.length == 1 && args[0].equalsIgnoreCase("@LOC")) {
-			words = " I am at X:" + (int) loc.getX() + " Y:" + (int) loc.getY() + " Z:" + (int) loc.getZ();
+			words = new StringBuilder(" I am at X:" + (int) loc.getX() + " Y:" + (int) loc.getY() + " Z:" + (int) loc.getZ());
 		}
 
 		/* Otherwise show written message */
 		else {
 			for(int i = 0; i < argc; i++) {
-				words += " " + args[i];
+				words.append(" ").append(args[i]);
 			}
 		}
 
-		String message = name + ":" + ChatColor.GREEN + words;
-		clan.sendMessage(message);
+		clan.sendPrefixedMessage(Component.text(name + ":", NamedTextColor.DARK_GREEN)
+				.append(Component.text(words.toString(), NamedTextColor.GREEN)));
 	}
 }

@@ -22,15 +22,10 @@ public class Area {
 
 	private String worldName;
 	private AreaChunk centerChunk;
-	//private List<AreaChunk> areaChunks = new ArrayList<AreaChunk>();
 
-	private HashSet<AreaChunk> areaChunks = new HashSet<AreaChunk>();
-
-
-	private HashSet<AreaUpgrade> upgrades = new HashSet<AreaUpgrade>();
-
-	private int maxAreaSize = Kingdoms.settings.getMaxAreaSize();
-
+	private final HashSet<AreaChunk> areaChunks = new HashSet<AreaChunk>();
+	private final HashSet<AreaUpgrade> upgrades = new HashSet<AreaUpgrade>();
+	private final int maxAreaSize = Kingdoms.settings.getMaxAreaSize();
 
 	// TODO: productions
 
@@ -110,11 +105,8 @@ public class Area {
 	}
 
 	public Location getAreaCenterLocation() {
-
 		Chunk chunk = getCenterChunk().getChunk();
-		Location loc = chunk.getBlock(8, 60, 8).getLocation();
-
-		return loc;
+		return chunk.getBlock(8, 60, 8).getLocation();
 	}
 
 	public String getFormattedAreaCoordinates() {
@@ -184,37 +176,17 @@ public class Area {
 		this.centerChunk = centerChunk;
 	}
 
-	/*
-    public List<AreaChunk> getAreaChunks() {
-        return areaChunks;
-    }
-
-    public void setAreaChunks(List<AreaChunk> areaChunks) {
-        this.areaChunks = areaChunks;
-    }
-    */
 	public HashSet<AreaChunk> getAreaChunks() {
 		return areaChunks;
-	}
-
-	public void setAreaChunks(HashSet<AreaChunk> areaChunks) {
-		this.areaChunks = areaChunks;
 	}
 
 	public HashSet<AreaUpgrade> getUpgrades() {
 		return upgrades;
 	}
 
-	public void setUpgrades(HashSet<AreaUpgrade> upgrades) {
-		this.upgrades = upgrades;
-	}
-
 	public int getMaxAreaSize() {
 		return maxAreaSize;
 	}
 
-	public void setMaxAreaSize(int maxAreaSize) {
-		this.maxAreaSize = maxAreaSize;
-	}
 }
 

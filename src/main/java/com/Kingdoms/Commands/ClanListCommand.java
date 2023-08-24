@@ -1,13 +1,14 @@
 package com.Kingdoms.Commands;
 
-import java.util.Set;
-import java.util.UUID;
-
-import org.bukkit.ChatColor;
-
 import com.Kingdoms.Teams.Clan;
 import com.Kingdoms.Teams.ClanPlayer;
 import com.Kingdoms.Teams.Clans;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.TextColor;
+
+import java.util.Set;
+import java.util.UUID;
 
 public class ClanListCommand extends Command {
 
@@ -18,19 +19,18 @@ public class ClanListCommand extends Command {
 		super(clanPlayer, args);
 
 		Set<UUID> clans = Clans.getClans().keySet();
-
-		String message = INFO_DARK + "Showing All Teams (" + INFO + "Total: " + clans.size() + INFO_DARK + ")\n";
-
+		TextComponent.Builder message = Component.text()
+				.append(Component.text("Showing All Teams ", INFO_DARK))
+				.append(wrap('(', "Total: " + clans.size(), ')', INFO_DARK, INFO))
+				.appendNewline();
 
 		for (UUID uniqueId : clans) {
-
 			// TODO show pages for more than 10 teams sorted by creation date
 
 			Clan clan = Clans.getClanById(uniqueId);
 
-			ChatColor c = clan.getColor();
+			TextColor c = clan.getColor();
 			String tag = (clan.getTag() == null) ? "" : clan.getTag();
-
 
 			/* Online and Total Player Count */
 			int opc = clan.getOnlineMembers().size();
@@ -38,9 +38,13 @@ public class ClanListCommand extends Command {
 
 
 			/* Team */
-			message += c + "[" + tag + "] " + WHITE + clan.getName() + c + " [" + opc + "/" + tpc + "]\n";
+			message.append(wrap('[', tag, ']', c))
+					.appendSpace()
+					.append(Component.text(clan.getName()))
+					.append(Component.text(" [" + opc + "/" + tpc + "]\n", c));
 		}
-		msg(message);
+
+		player.sendMessage(message.build());
 	}
 
 }

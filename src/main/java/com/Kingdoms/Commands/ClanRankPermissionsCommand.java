@@ -2,6 +2,8 @@ package com.Kingdoms.Commands;
 
 import com.Kingdoms.Teams.ClanPlayer;
 import com.Kingdoms.Teams.ClanRank;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 
 public class ClanRankPermissionsCommand extends Command {
 
@@ -11,20 +13,20 @@ public class ClanRankPermissionsCommand extends Command {
 	public ClanRankPermissionsCommand(ClanPlayer clanPlayer, String[] args) {
 		super(clanPlayer, args);
 
-		String permissions = INFO_DARK + "Valid Permissions:\n";
+		TextComponent.Builder permissions = Component.text().append(Component.text("Valid Permissions:\n", INFO_DARK));
 		boolean first = false;
 
 		for (String permission : ClanRank.permissionList) {
 
 			if (first) {
-				permissions += INFO_DARK + ",";
+				permissions.append(Component.text(", ", INFO_DARK));
 			}
 
 			first = true;
-			permissions += INFO + " " + permission.toLowerCase();
+			permissions.append(Component.text(" " + permission.toLowerCase(), INFO));
 		}
 
-		msg(permissions);
+		player.sendMessage(permissions.build());
 	}
 
 }

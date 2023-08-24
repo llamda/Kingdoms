@@ -2,6 +2,7 @@ package com.Kingdoms.Commands;
 
 import com.Kingdoms.Teams.ClanPlayer;
 import com.Kingdoms.Teams.ClanRank;
+import net.kyori.adventure.text.Component;
 
 public class ClanRankSetCommand extends Command {
 
@@ -12,17 +13,17 @@ public class ClanRankSetCommand extends Command {
 		super(clanPlayer, args);
 
 		if (argc < 3) {
-			msg(USAGE + CLAN_RSET);
+			usage(CLAN_RANK_SET);
 			return;
 		}
 
 		if (clan == null) {
-			msg(ERR + NEED_TEAM);
+			error(NEED_TEAM);
 			return;
 		}
 
 		if (!rank.hasPermission("RANKEDIT")) {
-			msg(ERR + NO_PERMISSION);
+			error(NO_PERMISSION);
 			return;
 		}
 
@@ -39,30 +40,30 @@ public class ClanRankSetCommand extends Command {
 		}
 
 		if (promoted == null) {
-			msg(ERR + PLAYER_NOT_FOUND);
+			error(PLAYER_NOT_FOUND);
 			return;
 		}
 
 		/* Get rank */
-		String rankName = args[2];
+		StringBuilder rankName = new StringBuilder(args[2]);
 		for (int i = 3; i < argc; i++) {
-			rankName += " " + args[i];
+			rankName.append(" ").append(args[i]);
 		}
 
-		ClanRank newRank = clan.getRankByName(rankName);
+		ClanRank newRank = clan.getRankByName(rankName.toString());
 
 		if (newRank == null) {
-			msg(ERR + RANK_NOT_FOUND);
+			error(RANK_NOT_FOUND);
 			return;
 		}
 
 		if (newRank.getRankNumber() < rank.getRankNumber()) {
-			msg(ERR + NO_PERMISSION);
+			error(NO_PERMISSION);
 			return;
 		}
 
 		if (promoted.getUuid().equals(clanPlayer.getUuid())) {
-			msg(ERR + NO_PERMISSION);
+			error(NO_PERMISSION);
 			return;
 		}
 
@@ -75,14 +76,14 @@ public class ClanRankSetCommand extends Command {
 		clan.saveData();
 
 		/* Promotion / Demotion message */
-		boolean wasPromoted = (oldRank.getRankNumber() > newRank.getRankNumber()) ? true : false;
+		boolean wasPromoted = oldRank.getRankNumber() > newRank.getRankNumber();
 
 		if (wasPromoted) {
-			clan.sendMessage(SUCCESS + promoted.getName() + " has been promoted to " + newRank.getTitle());
+			clan.sendPrefixedMessage(Component.text(promoted.getName() + " has been promoted to " + newRank.getTitle(), SUCCESS));
 		}
 
 		else {
-			clan.sendMessage(ERR + promoted.getName() + " has been demoted to " + newRank.getTitle());
+			clan.sendPrefixedMessage(Component.text(promoted.getName() + " has been demoted to " + newRank.getTitle(), ERR));
 		}
 	}
 
