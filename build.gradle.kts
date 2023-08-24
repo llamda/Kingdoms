@@ -2,7 +2,7 @@ plugins {
     id("java")
 }
 
-group = "com.Kingdoms"
+group = "com.kingdoms"
 version = "1.0-SNAPSHOT"
 
 repositories {
