@@ -13,6 +13,7 @@ import java.util.HashSet;
 public class ClanAreaMapCommand extends Command {
 
 	public static final String SQUARE = "\u2588";
+	public static final String PLAYER = "\u263B";
 
 	public ClanAreaMapCommand(ClanPlayer clanPlayer, String[] args) {
 		super(clanPlayer, args);
@@ -47,15 +48,16 @@ public class ClanAreaMapCommand extends Command {
 
 			for (int x = minX - 1, xn = minX + width + 1; x <= xn; x++) {
 				AreaChunk here = new AreaChunk(area.getWorldName(), x, z);
+				String s = (here.equals(chunk)) ? PLAYER : SQUARE;
 
 				if (chunks.contains(here)) {
 					if (here.equals(area.getCenterChunk())) {
-						message.append(Component.text(SQUARE, NamedTextColor.GOLD));
+						message.append(Component.text(s, NamedTextColor.GOLD));
 					} else {
-						message.append(Component.text(SQUARE, NamedTextColor.GREEN));
+						message.append(Component.text(s, NamedTextColor.GREEN));
 					}
 				} else {
-					message.append(Component.text(SQUARE, NamedTextColor.RED));
+					message.append(Component.text(s, NamedTextColor.RED));
 				}
 
 			}
