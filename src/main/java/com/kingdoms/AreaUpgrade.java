@@ -7,7 +7,8 @@ public enum AreaUpgrade {
 	SPAWNER(5, "Spawners can not be broken."),
 	LOCK(10, "Locks doors, levers, buttons, etc."),
 	TNT(5, "TNT can not be placed inside your area."),
-	FIRE(5, "Burnt blocks will be restored inside your area.");
+	FIRE(5, "Burnt blocks will be restored inside your area."),
+	MOBS(40, "Hostile mobs will no longer attack your team.");
 	// ALARM(10, "")
 
 	private int cost;

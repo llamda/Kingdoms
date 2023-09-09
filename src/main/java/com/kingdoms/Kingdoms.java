@@ -8,6 +8,7 @@ import com.kingdoms.events.BlockFromTo;
 import com.kingdoms.events.BlockPlace;
 import com.kingdoms.events.ChunkUnload;
 import com.kingdoms.events.CreatureSpawn;
+import com.kingdoms.events.EntityTarget;
 import com.kingdoms.events.Events;
 import com.kingdoms.events.PlayerBucketEmpty;
 import com.kingdoms.events.PlayerInteract;
@@ -57,6 +58,7 @@ public class Kingdoms extends JavaPlugin {
 		pm.registerEvents(new BlockBurn(), this);
 		pm.registerEvents(new ChunkUnload(), this);
 		pm.registerEvents(new CreatureSpawn(), this);
+		pm.registerEvents(new EntityTarget(), this);
 
 		/* Register Commands */
 		CommandListener commandListener = new CommandListener();
