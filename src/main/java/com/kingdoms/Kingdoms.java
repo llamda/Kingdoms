@@ -44,21 +44,23 @@ public class Kingdoms extends JavaPlugin {
 
 		/* Register Events */
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new AsyncChat(), this);
-		pm.registerEvents(new PlayerJoin(), this);
-		pm.registerEvents(new PlayerQuit(), this);
-		pm.registerEvents(new BlockDamage(), this);
-		pm.registerEvents(new BlockPlace(), this);
-		pm.registerEvents(new BlockBreak(), this);
-		pm.registerEvents(new PlayerBucketEmpty(), this);
-		pm.registerEvents(new BlockFromTo(), this);
-		pm.registerEvents(new PlayerInteract(), this);
-		pm.registerEvents(new PlayerMove(), this);
-		pm.registerEvents(new PlayerTeleport(), this);
-		pm.registerEvents(new BlockBurn(), this);
-		pm.registerEvents(new ChunkUnload(), this);
-		pm.registerEvents(new CreatureSpawn(), this);
-		pm.registerEvents(new EntityTarget(), this);
+		Stream.of(
+				new AsyncChat(),
+				new PlayerJoin(),
+				new PlayerQuit(),
+				new BlockDamage(),
+				new BlockPlace(),
+				new BlockBreak(),
+				new PlayerBucketEmpty(),
+				new BlockFromTo(),
+				new PlayerInteract(),
+				new PlayerMove(),
+				new PlayerTeleport(),
+				new BlockBurn(),
+				new ChunkUnload(),
+				new CreatureSpawn(),
+				new EntityTarget()
+		).forEach(listener -> pm.registerEvents(listener, Kingdoms.instance));
 
 		/* Register Commands */
 		CommandListener commandListener = new CommandListener();
