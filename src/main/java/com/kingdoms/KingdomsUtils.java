@@ -2,6 +2,11 @@ package com.kingdoms;
 
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
+import java.util.Optional;
 
 public class KingdomsUtils {
 
@@ -28,6 +33,12 @@ public class KingdomsUtils {
 			case "YELLOW" -> 		NamedTextColor.YELLOW;
 			default -> 				null;
 		};
+	}
+
+	public static void removeInfiniteSlowDig(Player player) {
+		Optional.ofNullable(player.getPotionEffect(PotionEffectType.SLOW_DIGGING))
+				.map(PotionEffect::isInfinite)
+				.ifPresent(__ -> player.removePotionEffect(PotionEffectType.SLOW_DIGGING));
 	}
 
 }

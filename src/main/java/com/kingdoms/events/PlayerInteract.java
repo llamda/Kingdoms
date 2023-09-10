@@ -5,6 +5,7 @@ import com.kingdoms.AreaChunk;
 import com.kingdoms.AreaUpgrade;
 import com.kingdoms.Areas;
 import com.kingdoms.Connections;
+import com.kingdoms.KingdomsUtils;
 import com.kingdoms.teams.ClanPlayer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -16,8 +17,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -78,11 +77,7 @@ public class PlayerInteract implements Listener {
 		}
 
 		if (action == Action.LEFT_CLICK_AIR) {
-			PotionEffect potion = player.getPotionEffect(PotionEffectType.SLOW_DIGGING);
-			// Player has effect longer than Elder Guardians give
-			if (potion != null && potion.getDuration() > 10000) {
-				player.removePotionEffect(PotionEffectType.SLOW_DIGGING);
-			}
+			KingdomsUtils.removeInfiniteSlowDig(player);
 		}
 
 		if (action == Action.RIGHT_CLICK_BLOCK) {
